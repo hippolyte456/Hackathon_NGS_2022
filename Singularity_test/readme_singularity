@@ -1,0 +1,12 @@
+## Activate the conda environment
+conda activate
+## Install singularity (just once per newly activated VM)
+mamba install singularity=3.6.3
+## Display singularity help
+singularity --help
+
+## If the file is already created
+sudo singularity build fastqc.img Singularity.fastqc
+
+## try the container
+singularity run fastqc.img --help

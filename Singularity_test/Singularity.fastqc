@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: centos:7
+
+%post
+    yum install -y java-1.8.0-openjdk
+    yum install -y wget unzip perl
+    wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip --no-check-certificate
+    unzip fastqc_v0.11.9.zip
+    chmod 755 /FastQC/fastqc
+
+%environment
+    export PATH=/FastQC:$PATH
+
+%runscript
+    exec fastqc "$@"
