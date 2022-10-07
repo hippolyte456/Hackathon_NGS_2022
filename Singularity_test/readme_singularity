@@ -22,5 +22,6 @@ export PATH=<your_PATH_to_singularity>:$PATH
 
 ## try the container
 singularity run fastqc.img --help
-### if error with perl: warning: Setting locale failed.
-export LC_ALL=C
+
+## execute tool in shell 
+singularity shell fastqc.img 
