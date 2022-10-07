@@ -1,12 +1,24 @@
 ## Activate the conda environment
 conda activate
+
+### If you need to install mamba first
+conda install mamba
+
 ## Install singularity (just once per newly activated VM)
-mamba install singularity=3.6.3
+mamba install singularity=3.6.3 
+### If it doesn't work you can try
+mamba install -c conda-forge singularity
+
 ## Display singularity help
 singularity --help
 
 ## If the file is already created
 sudo singularity build fastqc.img Singularity.fastqc
+### If singularity not find
+which singularity
+### then replace 'singularity' with the full path to the command on the previous sudo command
+### if you want you can add the path of the 'singularity' command to your environmental path using :
+export PATH=<your_PATH_to_singularity>:$PATH
 
 ## try the container
 singularity run fastqc.img --help
