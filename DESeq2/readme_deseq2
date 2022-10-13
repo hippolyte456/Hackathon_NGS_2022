@@ -1,0 +1,24 @@
+## DESeq2 description
+The DESeq2 package is designed for normalization, visualization, and differential analysis of high-dimensional count data.  It makes use of empirical Bayes techniques to estimate priors for log foldchange and dispersion, and to calculate posterior estimates for these quantities.
+
+### Details
+
+The main functions are:
+    •   DESeqDataSet- build the dataset, see tximeta & tximport packages for preparing input
+    •   DESeq- perform differential analysis
+    •   results- build a results table
+    •   lfcShrink- estimate shrunken LFC (posterior estimates) using apeglm & ashr pakges•vst- apply variance stabilizing transformation, e.g. for PCA or sample clustering
+    •  Plots, e.g. : plotPCA, plotMA, plotCounts
+
+## BUild the image
+sudo singularity build DESeq2.img Singularity.deseq2
+
+## try the container
+singularity run fastqc.img --help
+
+## execute tool in shell 
+singularity shell fastqc.img 
+
+## Check if it worked
+### In your image execute : (Doesn't work for the moment ...)
+R -e 'browseVignettes("DESeq2")'
