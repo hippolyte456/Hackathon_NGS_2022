@@ -1,0 +1,13 @@
+## Fastq_dump description
+
+## BUild the image
+sudo singularity build fastq_dump.img Singularity.fastq_dump
+
+## try the container
+singularity run fastq_dump.img --help
+
+## execute tool in shell 
+singularity shell fastq_dump.img 
+
+## Check if it worked
+fasterq-dump -V
