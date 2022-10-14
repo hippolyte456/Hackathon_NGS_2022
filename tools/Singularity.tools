@@ -1,0 +1,40 @@
+Bootstrap: docker
+FROM: ubuntu:20.04
+
+%post
+    # Install packages
+    apt-get update
+    apt-get install -y tar wget make gcc libz-dev build-essential
+    DEBIAN_FRONTEND="noninteractive" TZ="Europe" apt-get install -y tzdata
+    apt-get install -y openjdk-8-jdk unzip perl
+
+    # STAR
+    wget https://github.com/alexdobin/STAR/archive/2.7.10a.tar.gz 
+    tar -xzvf 2.7.10a.tar.gz  -C /usr/local 
+    rm 2.7.10a.tar.gz
+    mv /usr/local/STAR-2.7.10a /usr/local/STAR
+    make STAR -C /usr/local/STAR/source
+
+    # FastQC
+    wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip --no-check-certificate
+    unzip fastqc_v0.11.9.zip -d /usr/local 
+    rm fastqc_v0.11.9.zip
+    chmod 755 /usr/local/FastQC/fastqc
+
+    # SRAtoolkit
+    wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
+    tar -xvzf sratoolkit.3.0.0-ubuntu64.tar.gz -C /usr/local 
+    rm sratoolkit.3.0.0-ubuntu64.tar.gz
+    mv /usr/local/sratoolkit.3.0.0-ubuntu64 /usr/local/sratoolkit
+    export PATH=$PATH:/usr/local/sratoolkit/bin
+    vdb-config --restore-defaults
+    vdb-config
+
+    # Cleaning
+    apt-get autoremove -y && apt-get clean
+   
+%environment
+    export PATH=:$PATH:/usr/local/STAR/bin/Linux_x86_64:/usr/local/FastQC:/usr/local/sratoolkit/bin
+
+%runscript
+    exec fastqc "$@"
