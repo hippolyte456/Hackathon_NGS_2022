@@ -14,10 +14,10 @@ The main functions are:
 sudo singularity build DESeq2.img Singularity.deseq2
 
 ## try the container
-singularity run fastqc.img --help
+singularity run DESeq2.img --help
 
 ## execute tool in shell 
-singularity shell fastqc.img 
+singularity shell DESeq2.img 
 
 ## Check if it worked
 ### In your image execute : (Doesn't work for the moment ...)

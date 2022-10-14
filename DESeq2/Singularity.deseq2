@@ -3,6 +3,7 @@ FROM: r-base:4.0.3
 
 %post
     apt-get update
+    # install r
     apt-get install -y procps libssl-dev libcurl4-gnutls-dev curl git libopenmpi-dev openmpi-bin openmpi-doc libxml2-dev cmake
     R -e "if (!requireNamespace('BiocManager', quietly = TRUE)){install.packages('BiocManager')}" 
     R -e "BiocManager::install('DESeq2')" 
@@ -12,5 +13,6 @@ FROM: r-base:4.0.3
     R -e "BiocManager::install('FactoMineR')"
     
 %environment
+# snakemake, r script 
 
 %runscript

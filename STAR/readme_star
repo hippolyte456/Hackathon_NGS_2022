@@ -1,0 +1,13 @@
+## Fastq_dump description
+
+## BUild the image
+sudo singularity build star.img Singularity.star
+
+## try the container
+singularity run star.img --help
+
+## execute tool in shell 
+singularity shell star.img 
+
+## Check if it worked
+STAR
