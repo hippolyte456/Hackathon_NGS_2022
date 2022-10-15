@@ -32,6 +32,13 @@ FROM: ubuntu:22.04
     export PATH=$PATH:/usr/local/sratoolkit/bin
     vdb-config --restore-defaults
     vdb-config
+
+    # Subread
+    wget -O subread.tar.gz https://downloads.sourceforge.net/project/subread/subread-2.0.0/subread-2.0.0-Linux-x86_64.tar.gz
+    tar -xzvf subread.tar.gz  -C /usr/local
+    rm -rf subread.tar.gz
+    mv /usr/local/subread-2.0.0-Linux-x86_64 /usr/local/subread
+
    
     # DESeq2
     R -e 'if (!require("BiocManager", quietly = TRUE))
@@ -43,7 +50,7 @@ FROM: ubuntu:22.04
 
 
 %environment
-    export PATH=:$PATH:/usr/local/STAR/bin/Linux_x86_64:/usr/local/FastQC:/usr/local/sratoolkit/bin
+    export PATH=:$PATH:/usr/local/STAR/bin/Linux_x86_64:/usr/local/FastQC:/usr/local/sratoolkit/bin:$PATH:/usr/local/subread/bin
 
 %runscript
     exec fastqc "$@"

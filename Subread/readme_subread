@@ -1,0 +1,13 @@
+## Fastq_dump description
+
+## BUild the image
+sudo singularity build subread Singularity.subread
+
+## try the container
+singularity run subread--help
+
+## execute tool in shell 
+singularity shell subread
+
+## Check if it worked
+subread-align --version
