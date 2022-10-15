@@ -21,4 +21,5 @@ singularity shell DESeq2.img
 
 ## Check if it worked
 ### In your image execute : (Doesn't work for the moment ...)
-R -e 'browseVignettes("DESeq2")'
+R -e 'browseVignettes("DESeq2")' // Doesn't work on img as we don't have acces to an internet browser
+R -e 'library( "DESeq2")' // 20 98 653

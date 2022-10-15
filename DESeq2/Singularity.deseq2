@@ -1,18 +1,24 @@
 Bootstrap: docker
-FROM: r-base:4.0.3
+FROM: ubuntu:22.04
 
 %post
-    apt-get update
-    # install r
-    apt-get install -y procps libssl-dev libcurl4-gnutls-dev curl git libopenmpi-dev openmpi-bin openmpi-doc libxml2-dev cmake
-    R -e "if (!requireNamespace('BiocManager', quietly = TRUE)){install.packages('BiocManager')}" 
-    R -e "BiocManager::install('DESeq2')" 
-    R -e "url='https://cran.r-project.org/src/contrib/pheatmap_1.0.12.tar.gz';install.packages(url, repos=NULL, type='source')" 
-    R -e "url='https://cran.r-project.org/src/contrib/RColorBrewer_1.1-2.tar.gz';install.packages(url, repos=NULL, type='source')"
-    R -e "BiocManager::install('factoextra')" 
-    R -e "BiocManager::install('FactoMineR')"
+    # Install packages
+    apt-get update --fix-missing
+    apt-get install -y tar wget make git gcc sudo vim zsh
+    sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+    DEBIAN_FRONTEND="noninteractive" TZ="Europe" apt-get install -y tzdata
+
+    apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
     
-%environment
-# snakemake, r script 
+    apt install -y r-base
+
+    R -e 'if (!require("BiocManager", quietly = TRUE))
+            install.packages("BiocManager")
+            BiocManager::install("DESeq2")'
+ 
+    # Cleaning
+    apt-get autoremove -y && apt-get clean
 
 %runscript
+    R --no-save
+    zsh -y
