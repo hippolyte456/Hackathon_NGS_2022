@@ -2,7 +2,8 @@ Bootstrap: docker
 FROM: ubuntu:22.04
 
 %post
-    #Install packages
+
+    # Install Dependancies
     apt-get update --fix-missing
     apt-get install -y tar wget make
 
@@ -12,6 +13,8 @@ FROM: ubuntu:22.04
     rm -rf subread.tar.gz
     mv /usr/local/subread-2.0.0-Linux-x86_64 /usr/local/subread
 
+    # Cleaning
+    apt-get autoremove -y && apt-get clean
 
 %environment
     export PATH=:$PATH:/usr/local/subread/bin

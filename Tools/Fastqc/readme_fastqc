@@ -13,7 +13,7 @@ mamba install -c conda-forge singularity
 singularity --help
 
 ## If the file is already created
-sudo singularity build fastqc.img Singularity.fastqc
+sudo singularity build fastqc Singularity.fastqc
 ### If singularity not find
 which singularity
 ### then replace 'singularity' with the full path to the command on the previous sudo command
@@ -21,7 +21,10 @@ which singularity
 export PATH=<your_PATH_to_singularity>:$PATH
 
 ## try the container
-singularity run fastqc.img --help
+singularity run fastqc --help
 
 ## execute tool in shell 
-singularity shell fastqc.img 
+singularity shell fastqc
+
+## Check if it worked
+fastqc --help | wc -l | awk ' {if ($0==122) {print "TESTING FASTQC : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FASTQC :\033[1;31m no \033[0;0m"}}'

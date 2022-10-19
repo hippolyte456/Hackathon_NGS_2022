@@ -11,3 +11,4 @@ singularity shell subread
 
 ## Check if it worked
 subread-align --version
+which subread-align | wc -c | awk ' {if ($0==37) {print "TESTING Subread : \033[1;32m yes \033[0;0m"; exit}{print "TESTING Subread :\033[1;31m no \033[0;0m"}}'

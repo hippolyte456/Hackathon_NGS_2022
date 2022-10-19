@@ -11,7 +11,7 @@ The main functions are:
     •  Plots, e.g. : plotPCA, plotMA, plotCounts
 
 ## BUild the image
-sudo singularity build DESeq2.img Singularity.deseq2
+sudo singularity build DESeq2 Singularity.deseq2
 
 ## try the container
 singularity run DESeq2.img --help
@@ -23,3 +23,4 @@ singularity shell DESeq2.img
 ### In your image execute : (Doesn't work for the moment ...)
 R -e 'browseVignettes("DESeq2")' // Doesn't work on img as we don't have acces to an internet browser
 R -e 'library( "DESeq2")' // 20 98 653
+R --vanilla  -e 'library( "DESeq2")' &>/dev/null | wc -l | awk ' {if ($0==20) {print "TESTING DESeq2 : \033[1;32m yes \033[0;0m"; exit}{print "TESTING DESeq2 :\033[1;31m no \033[0;0m"}}'
