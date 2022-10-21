@@ -8,10 +8,10 @@ FROM: ubuntu:22.04
     apt-get install -y tar wget
 
     # FASTQ DUMP
-    wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
-    tar -xvzf sratoolkit.3.0.0-ubuntu64.tar.gz -C /usr/local 
-    rm sratoolkit.3.0.0-ubuntu64.tar.gz
-    mv /usr/local/sratoolkit.3.0.0-ubuntu64 /usr/local/sratoolkit
+    wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.8.0/sratoolkit.2.8.0-ubuntu64.tar.gz
+    tar -xvzf sratoolkit.2.8.0-ubuntu64.tar.gz -C /usr/local 
+    rm sratoolkit.2.8.0-ubuntu64.tar.gz
+    mv /usr/local/sratoolkit.2.8.0-ubuntu64 /usr/local/sratoolkit
     export PATH=$PATH:/usr/local/sratoolkit/bin
     vdb-config --restore-defaults
 
