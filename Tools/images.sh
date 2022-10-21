@@ -36,9 +36,12 @@ fi
 
 for name in $tools_name
 do 
-    if ls ./.logscript/ | grep ${name} &>/dev/null || ls ./images/ | grep ${name} &>/dev/null # Si image et historique checker si diff puis build ou non
+    var1=$(ls ./.logscript/ | grep ${name} | wc -l) 
+    var2=$(ls ./images/ | grep ${name} | wc -l)
+    if [ $var1 -gt 0 ] && [ $var2 -gt 0 ]  # Si image et historique checker si diff puis build ou non
     then
         var=$(diff ./${name}/Singularity.${name} ./.logscript/Singularity.${name} | wc -l)
+        echo $var
         if [ $var -gt 0 ]
         then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
@@ -46,15 +49,14 @@ do
             rm ./.logscript/Singularity.${name}
             cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
         fi
-    else
-        var=$(ls ./${name} | grep singularity | wc -l)
-        if [ $var -gt 0 ]
-        then
+    fi 
+    var=$(ls ./${name} | grep Singularity | wc -l)
+    if [ $var -gt 0 ] && ([ $var1 -eq 0 ] || [ $var2 -eq 0 ]) 
+    then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
             sudo singularity build ./images/${name} ./${name}/Singularity.${name}
             rm ./.logscript/Singularity.${name}
             cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
-        fi
     fi
 done
 
@@ -76,7 +78,7 @@ else
 fi
 if exists_in_list "$tools_built" "" fastq_dump;
 then
-    singularity exec ./images/fastq_dump fastq-dump --help | wc -l | awk ' {if ($0==120) {print "TESTING FAST DUMP : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FAST DUMP :\033[1;31m no \033[0;0m"}}'
+    singularity exec ./images/fastq_dump fastq-dump --help | wc -l | awk ' {if ($0>120) {print "TESTING FAST DUMP : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FAST DUMP :\033[1;31m no \033[0;0m"}}'
 else
     echo -e "${RED}fastq_dump not build${EOC}"
 fi
