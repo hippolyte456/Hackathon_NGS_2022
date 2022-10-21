@@ -14,42 +14,50 @@ bold="\e[1m"
 uline="\e[4m"
 reset="\e[0m"
 
-################################
-### Removing Previous Images ###
-################################
-
-if ls -l | grep drw | grep images &>/dev/null 
-then
-    read -p "Build target already exists. Do you want to overwrite? [N/y]" REP1
-    if [[ $REP1 == "N" ]]
-    then
-        exit 0
-    else
-        rm -rf images
-    fi
-fi
-
-#######################
-### Creating Images ###
-#######################
-
-mkdir images #Create folder that will store the images
-tools_name=$(ls -l | grep drw | awk 'NF>1 {print $NF}') # Get folders names 
-for name in $tools_name
-do
-    if [ "$name" != "images" ]
-    then
-        echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
-        sudo singularity build ./images/${name} ./${name}/Singularity.${name}
-    fi
-done
-
 function exists_in_list() {
     LIST=$1
     DELIMITER=$2
     VALUE=$3
     [[ "$LIST" =~ ($DELIMITER|^)$VALUE($DELIMITER|$) ]]
 }
+
+tools_name=$(ls -l | grep drw | awk 'NF>1 {print $NF}');
+if ! ls -la | grep .logscript  &>/dev/null 
+then
+    mkdir .logscript
+fi
+
+if ! ls -l | grep drw | grep images &>/dev/null 
+then 
+    mkdir images
+fi
+
+
+
+for name in $tools_name
+do 
+    if ls ./.logscript/ | grep ${name} &>/dev/null || ls ./images/ | grep ${name} &>/dev/null # Si image et historique checker si diff puis build ou non
+    then
+        var=$(diff ./${name}/Singularity.${name} ./.logscript/Singularity.${name} | wc -l)
+        if [ $var -gt 0 ]
+        then
+            echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
+            rm ./.logscript/Singularity.${name}
+            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
+        fi
+    else
+        var=$(ls ./${name} | grep singularity | wc -l)
+        if [ $var -gt 0 ]
+        then
+            echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
+            rm ./.logscript/Singularity.${name}
+            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
+        fi
+    fi
+done
+
 
 ######################
 ### Testing Images ###
