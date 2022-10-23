@@ -6,15 +6,18 @@ FROM: ubuntu:22.04
     # Install Dependancies
     apt-get update
     apt-get install -y tar wget
+    apt-get install sra-toolkit
 
     # FASTQ DUMP
-    wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.8.0/sratoolkit.2.8.0-ubuntu64.tar.gz
-    tar -xvzf sratoolkit.2.8.0-ubuntu64.tar.gz -C /usr/local 
-    rm sratoolkit.2.8.0-ubuntu64.tar.gz
-    mv /usr/local/sratoolkit.2.8.0-ubuntu64 /usr/local/sratoolkit
-    export PATH=$PATH:/usr/local/sratoolkit/bin
-    cd /usr/local/sratoolkit
-    vdb-config --restore-defaults
+   # wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
+   # wget --output-document sratoolkit.tar.gz https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz
+   # tar -xvzf sratoolkit.tar.gz -C /usr/local 
+   # rm sratoolkit.tar.gz
+   # mv /usr/local/sratoolkit* /usr/local/sratoolkit
+   # export PATH=$PATH:/usr/local/sratoolkit/bin
+   # cd /usr/local/sratoolkit
+   # vdb-config --restore-defaults
+   # printf '/LIBS/GUID = "%s"\n' `uuidgen` > /root/.ncbi/user-settings.mkfg
 
     # Cleaning
     apt-get autoremove -y && apt-get clean

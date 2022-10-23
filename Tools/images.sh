@@ -41,7 +41,6 @@ do
     if [ $var1 -gt 0 ] && [ $var2 -gt 0 ]  # Si image et historique checker si diff puis build ou non
     then
         var=$(diff ./${name}/Singularity.${name} ./.logscript/Singularity.${name} | wc -l)
-        echo $var
         if [ $var -gt 0 ]
         then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
@@ -78,7 +77,7 @@ else
 fi
 if exists_in_list "$tools_built" "" fastq_dump;
 then
-    singularity exec ./images/fastq_dump fastq-dump --help | wc -l | awk ' {if ($0>120) {print "TESTING FAST DUMP : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FAST DUMP :\033[1;31m no \033[0;0m"}}'
+    singularity exec ./images/fastq_dump fastq-dump --help | wc -l | awk ' {if ($0>100) {print "TESTING FAST DUMP : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FAST DUMP :\033[1;31m no \033[0;0m"}}'
 else
     echo -e "${RED}fastq_dump not build${EOC}"
 fi

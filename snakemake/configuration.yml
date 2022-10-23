@@ -26,18 +26,20 @@ Chromosom :
 #  - "chrY"
 
 NCBI_id :
-  - SRX209089
-  # - SRX209088
-  # - SRX209085
-  # - SRX209082
-  # - SRX209081
-  # - SRX209080
-  # - SRX209079
-  # - SRX209078
-  # - SRX209065
-  # - SRX209064
-  # - SRX209063
-
+  - "SRR651978"
+#  - SRR636533
+#  - SRR636531
+#  - SRR636532
+#  - SRR629597
+#  - SRR629596
+#  - SRR651978  short
+#  - SRR629595
+#  - SRR629594
+#  - SRR629593
+#  - SRR629569
+#  - SRR629568
+#  - SRR629566
+  
 Individual_conditions :
   SRR628582 : SF3B1 
   SRR628583 : SF3B1
@@ -59,16 +61,16 @@ Log :
     Err : .err
 
 GetGenome :
-  Repertory : ../Tools/fastq_dump
+  Repertory : fastqc/
   Extension : .fa.gz
   Filename : fastq_dump
   threads : 1
   version : 1
 
 GetFastq :
-  Repertory : ../Tools/images
-  Extension : .fastq.gz
-  Filename : fastqc
+  Repertory : fastq-dump/
+  Extension : .fastq
+  container : fastq-dump
   threads : 1
   version : 1
 
