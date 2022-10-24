@@ -34,19 +34,6 @@ Once the 'environment setup' is done :
 ```bash
 snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
 ```
-
-## Install snakemake (just once per newly activated VM)
-mamba create -c conda-forge -c bioconda -n snakemake snakemake
-
-## Activate the conda snakemake environment
-conda activate snakemake
-
-## Check help
-snakemake --help
-
-## RUN depuis le répertoire snakemake
-snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds 
-
 # Work Status
 
 ## Rules (Need to add a description but not now as it will still change maybe)
