@@ -62,18 +62,26 @@ import sys
 ## ~~ output
 #__output_PDEXSA_Annotation = config["PrepareDEXSeqAnnotations"]["Repertory"] + config["PrepareDEXSeqAnnotations"]["Filename"] + config["PrepareDEXSeqAnnotations"]["Extension"]
 
-#### GetFastq
+####################
+###   GetFastq   ###
+####################
 
 # ~~ parameters depending on inputs
-__params_GF_NCBI_id = config["NCBI_id"]
+__input_ADEXS_counts = expand("{repertory}{filename}{extension}",
+                              repertory = config["InsertConditions"]["Repertory"],
+                              filename = config["NCBI_id"],
+                              extension = config["InsertConditions"]["Extension"])
+__params_IC_Condition = lambda wildcard : config["Individual_conditions"][wildcard.ncbi_id]
+__params_GF_NCBI_id = lambda wildcard : config["NCBI_id"]
+#__params_IC_NCBI_id = "{ncbi_id}"
 
 # ~~ log
-#__stdout_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "{ncbi_id}" + config["Log"]["Extension"]["Out"]
-#__stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "{ncbi_id}" + config["Log"]["Extension"]["Err"]
+__stdout_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Out"]
+__stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Err"]
 
 # ~~ output
-__output_GF_Fastq1 = temp(config["GetFastq"]["Repertory"] + "SRR651978" + config["GetFastq"]["Extension"])
-#__output_GF_Fastq2 = temp(config["GetFastq"]["Repertory"] + "SRR651978" + "_2" + config["GetFastq"]["Extension"])
+__output_GF_Fastq1 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_1" + config["GetFastq"]["Extension"])
+__output_GF_Fastq2 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_2" + config["GetFastq"]["Extension"])
 
 #### MappingSTAR
 # ~~ input
@@ -174,8 +182,8 @@ include : os.getcwd() + "/GetFastq.rules"
 
 rule targets :
   input :
-    __output_GF_Fastq1
-#    __output_GF_Fastq2
+    __output_GF_Fastq1,
+    __output_GF_Fastq2
 #    __output_ADESX_Exon,
 #    __output_ADESX_Maplot,
 #    __output_ADESX_Dispersion,

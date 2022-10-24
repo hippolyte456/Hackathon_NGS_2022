@@ -26,29 +26,41 @@ Chromosom :
 #  - "chrY"
 
 NCBI_id :
-  - "SRR651978"
-#  - SRR636533
-#  - SRR636531
-#  - SRR636532
-#  - SRR629597
-#  - SRR629596
-#  - SRR651978  short
-#  - SRR629595
-#  - SRR629594
-#  - SRR629593
-#  - SRR629569
-#  - SRR629568
-#  - SRR629566
+  - SRR628586
+  - SRR636533
+  - SRR636531
+  - SRR636532
+  - SRR628589
+  - SRR628588
+  - SRR628587
+  - SRR628586
+  - SRR628585
+  - SRR628584
+  - SRR628583
+  - SRR628582
   
 Individual_conditions :
-  SRR628582 : SF3B1 
-  SRR628583 : SF3B1
-  SRR628584 : SF3B1
-  SRR628585 : WT
   SRR628586 : WT
-  SRR628587 : WT
-  SRR628588 : WT
-  SRR628589 : WT
+# SRR636533 : WT
+# SRR636531 : WT
+# SRR636532 : WT
+# SRR628589 : WT
+# SRR628588 : WT
+# SRR628587 : WT
+# SRR628586 : WT
+# SRR628585 : WT
+# SRR628584 : WT
+# SRR628583 : WT
+# SRR628582 : WT
+
+#  SRR628582 : SF3B1 
+#  SRR628583 : SF3B1
+#  SRR628584 : SF3B1
+#  SRR628585 : WT
+#  SRR628586 : WT
+#  SRR628587 : WT
+#  SRR628588 : WT
+#  SRR628589 : WT
 
 Input : 
   GTF : "tables.gtf"
@@ -63,7 +75,7 @@ Log :
 GetGenome :
   Repertory : fastqc/
   Extension : .fa.gz
-  Filename : fastq_dump
+  Filename : fastq-dump
   threads : 1
   version : 1
 

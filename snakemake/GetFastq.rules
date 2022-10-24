@@ -1,6 +1,6 @@
 __threads_GF = config["GetFastq"]["threads"]
 __version_GF = config["GetFastq"]["version"]
-__container_GF = config["GetFastq"]["container"]
+__container_GF = "./" + config["GetFastq"]["Repertory"] + config["GetFastq"]["container"]
 __params_GF_Repertory = config["GetFastq"]["Repertory"]
 
 #####
@@ -8,12 +8,12 @@ __params_GF_Repertory = config["GetFastq"]["Repertory"]
 rule GetFastq : 
   params :
     id = __params_GF_NCBI_id,
-    test = __output_GF_Fastq1,
-    repertory = __params_GF_Repertory
+    test = __container_GF,
+    repertory = __params_GF_Repertory,
   
   output :
-    fastq_1 = __output_GF_Fastq1
-#    fastq_2 = __output_GF_Fastq2
+    fastq_1 = __output_GF_Fastq1,
+    fastq_2 = __output_GF_Fastq2
   
   message :
     "GetFastq with sra toolkit for {params.id} NCBI_id"
@@ -25,23 +25,19 @@ rule GetFastq :
     __version_GF
   
   singularity :
-    './fastq-dump/fastq-dump'
+    __container_GF
   
-  container :
-    './fastq-dump/fastq-dump'
-  
-#  log :
-#    out = __stdout_GF
-#    err = __stderr_GF
+  log :
+    out = __stdout_GF,
+    err = __stderr_GF
 
   shell :
-#    "echo {params.id}"
-# "wget -O {params.id}.sra https://trace.ncbi.nlm.nih.gov/Traces/sra-reads-be/fastq\?acc\={params.id}; \
-    "echo {params.repertory}; \
-ls; \
-prefetch -f yes {params.id}; \
-fasterq-dump {params.id}/{params.id}.sra; \
-mv {params.id}.fastq {params.repertory}{params.id}.fastq; \
-rm -rf {params.id}"
-# mv {params.id}_2.fastq fastq-file\{params.id}_2.fastq 1> {log.out}; \
-#vdb-config -i; \
+    "prefetch -f yes {params.id} 1>{log.out} 2>{log.err}; \
+    fasterq-dump {params.id}/{params.id}.sra 1>{log.out} 2>{log.err}; \
+    if test -f ./{params.id}.fastq ; then mv {params.id}.fastq {params.repertory}{params.id}.fastq 1>{log.out} 2>{log.err}; \
+    fi; \
+    if test -f ./{params.id}_1.fastq ; then mv {params.id}_1.fastq {params.repertory}{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
+    fi; \
+    if test -f ./{params.id}_2.fastq ; then mv {params.id}_2.fastq {params.repertory}{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
+    fi; \
+    rm -rf {params.id}"
