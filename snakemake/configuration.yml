@@ -78,6 +78,15 @@ GetGenome :
   threads : 1
   version : 1
 
+GetAnnot :
+  Repertory : GenomeAnnot/
+  Extension : .gtf.gz
+  Filename : genome_annot
+  container : images/fastq-dump
+  genome_ref : GRCh38
+  threads : 1
+  version : 1
+
 GetFastq :
   Repertory : fastq-dump/
   Extension : .fastq
@@ -94,9 +103,10 @@ CreateIndex:
   version : 1
 
 PrepareAnnotations:
-  Repertory : ../Tools/images
+  Repertory : PrepareAnnotations/
   Extension : .gtf
-  Filename :  
+  Filename : PrepareAnnotations
+  container : images/subread
   threads : 1
   version : 1
 

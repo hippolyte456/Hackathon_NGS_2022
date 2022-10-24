@@ -42,7 +42,7 @@ rule MappingSTAR :
      --outFilterMultimapNmax 10 \
      --genomeDir {params.index_repertory} \
      --readFilesIn <({input.fastq1}) <({input.fastq2}) \
-     --runThreadN 8  \
+     --runThreadN 1  \
      --outSAMunmapped None \
      --outSAMtype BAM SortedByCoordinate \
      --outStd BAM_SortedByCoordinate \

@@ -1,0 +1,39 @@
+__threads_GGA = config["GetAnnot"]["threads"]
+__version_GGA = config["GetAnnot"]["version"]
+__output_GGA_Repertory = config["GetAnnot"]["Repertory"]
+__container_GGA = "./" + config["GetAnnot"]["container"]
+
+#####
+
+rule GetAnnot : 
+  params :
+    genome_ref = __params_GGA_genome_ref,
+    repertory = __output_GGA_Repertory,
+    filename = __params_GGA_file_name
+
+  output :
+    genome_annot = __output_GGA_Genome
+
+  message :
+    "GetGenome Annotation for reference genome {params.genome_ref}"
+  
+  threads :
+    __threads_GGA
+  
+  version :
+    __version_GGA
+
+  singularity :
+    __container_GGA
+  
+  log :
+    out = __stdout_GGA,
+    err = __stderr_GGA
+
+  shell :
+    "wget -O {params.filename}.gtf.gz https://ftp.ensembl.org/pub/release-101/gtf/homo_sapiens/Homo_sapiens.{params.genome_ref}.101.chr.gtf.gz 1>{log.out} 2>{log.err}; \
+    mv {params.filename}.gtf.gz {params.repertory}{params.filename}.gtf.gz "   
+#    wget -O {params.chr}.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/{params.chr}.fa.gz 1>{log.out} 2>{log.err}; \
+#    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz "
+##    rm -rf {params.repertory}{params.chr}.fa.gz"
+#    gunzip -c {params.repertory}{params.chr}.fa.gz > {params.repertory}{params.chr}.fa 2> {log.err}; \
