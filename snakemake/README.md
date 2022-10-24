@@ -11,15 +11,7 @@ conda activate snakemake
 snakemake --help
 
 ## RUN depuis le répertoire snakemake
-snakemake -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds 
+snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds 
 
---use-singularity
-
-
-## Other way to download
+## Other way to download snakemake 
 pip install snakemake
-
-
-## download
-prefetch SRR636531
-fasterq-dump   SRR636531

@@ -26,7 +26,6 @@ Chromosom :
 #  - "chrY"
 
 NCBI_id :
-  - SRR628586
   - SRR636533
   - SRR636531
   - SRR636532
@@ -73,9 +72,9 @@ Log :
     Err : .err
 
 GetGenome :
-  Repertory : fastqc/
-  Extension : .fa.gz
-  Filename : fastq-dump
+  Repertory : Genome/
+  Extension : .fa
+  Filename : genome
   threads : 1
   version : 1
 
@@ -87,9 +86,10 @@ GetFastq :
   version : 1
 
 CreateIndex:
-  Repertory : ../Tools/images
+  Repertory : CreateIndex/
   Extension : .ind
   Filename : star 
+  container : images/star
   threads : 1
   version : 1
 

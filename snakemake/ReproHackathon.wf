@@ -5,39 +5,45 @@ import sys
 #   Define Workflow   #
 #######################
 
-#### GetGenome
-## ~~ parameters depending on inputs
-#__params_GG_Chromosom = "{chromosom}"
-#
-## ~~ log
-#__stdout_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "{chromosom}" + config["Log"]["Extension"]["Out"]
-#__stderr_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "{chromosom}" + config["Log"]["Extension"]["Err"]
-#
-## ~~ output
-#__output_GG_Genome = config["GetGenome"]["Repertory"] + "{chromosom}" + config["GetGenome"]["Extension"]
+###################
+### GetGenome   ###
+###################
 
-#### CreateIndex
+# ~~ parameters depending on inputs
+__params_GG_Chromosom = "chr20"
+
+# ~~ log
+__stdout_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "chr20" + config["Log"]["Extension"]["Out"]
+__stderr_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "chr20" + config["Log"]["Extension"]["Err"]
+
+# ~~ output
+__output_GG_Genome = config["GetGenome"]["Repertory"] + "chr20" + config["GetGenome"]["Extension"]
+
+#######################
+###   CreateIndex   ###
+#######################
+
 # ~~ input
-#__input_CI_Genome = expand("{repertory}{filename}{extension}",
-#                            repertory = config["GetGenome"]["Repertory"],
-#                            filename = config["Chromosom"],
-#                            extension = config["GetGenome"]["Extension"])
-#
-## ~~ parameters depending on inputs
-#
-## ~~ log
-#__stdout_CI = config["Log"]["Repertory"] + config["CreateIndex"]["Repertory"] + config["CreateIndex"]["Filename"] + config["Log"]["Extension"]["Out"]
-#__stderr_CI = config["Log"]["Repertory"] + config["CreateIndex"]["Repertory"] + config["CreateIndex"]["Filename"] + config["Log"]["Extension"]["Err"]
-#
-## ~~ output
-#__output_CI_ChrL = config["CreateIndex"]["Repertory"] + "chrLength.txt"
-#__output_CI_ChrNL = config["CreateIndex"]["Repertory"] + "chrNameLength.txt"
-#__output_CI_ChrN = config["CreateIndex"]["Repertory"] + "chrName.txt"
-#__output_CI_ChrS = config["CreateIndex"]["Repertory"] + "chrStart.txt"
-#__output_CI_Genome = config["CreateIndex"]["Repertory"] + "Genome"
-#__output_CI_GenomeP = config["CreateIndex"]["Repertory"] + "genomeParameters.txt"
-#__output_CI_SA = config["CreateIndex"]["Repertory"] + "SA"
-#__output_CI_SAi= config["CreateIndex"]["Repertory"] + "SAindex"
+__input_CI_Genome = expaGetGenomend("{repertory}{filename}{extension}",
+                            repertory = config["GetGenome"]["Repertory"],
+                            filename = config["Chromosom"],
+                            extension = config["GetGenome"]["Extension"])
+
+# ~~ parameters depending on inputs
+
+# ~~ log
+__stdout_CI = config["Log"]["Repertory"] + config["CreateIndex"]["Repertory"] + config["CreateIndex"]["Filename"] + config["Log"]["Extension"]["Out"]
+__stderr_CI = config["Log"]["Repertory"] + config["CreateIndex"]["Repertory"] + config["CreateIndex"]["Filename"] + config["Log"]["Extension"]["Err"]
+
+# ~~ output
+__output_CI_ChrL = config["CreateIndex"]["Repertory"] + "chrLength.txt"
+__output_CI_ChrNL = config["CreateIndex"]["Repertory"] + "chrNameLength.txt"
+__output_CI_ChrN = config["CreateIndex"]["Repertory"] + "chrName.txt"
+__output_CI_ChrS = config["CreateIndex"]["Repertory"] + "chrStart.txt"
+__output_CI_Genome = config["CreateIndex"]["Repertory"] + "Genome"
+__output_CI_GenomeP = config["CreateIndex"]["Repertory"] + "genomeParameters.txt"
+__output_CI_SA = config["CreateIndex"]["Repertory"] + "SA"
+__output_CI_SAi= config["CreateIndex"]["Repertory"] + "SAindex"
 
 #### PrepareAnnotations
 # ~~ input 
@@ -72,7 +78,8 @@ __input_ADEXS_counts = expand("{repertory}{filename}{extension}",
                               filename = config["NCBI_id"],
                               extension = config["InsertConditions"]["Extension"])
 __params_IC_Condition = lambda wildcard : config["Individual_conditions"][wildcard.ncbi_id]
-__params_GF_NCBI_id = lambda wildcard : config["NCBI_id"]
+__params_GF_NCBI_id = "SRR628586"
+#__params_GF_NCBI_id = lambda wildcard : config["NCBI_id"]
 #__params_IC_NCBI_id = "{ncbi_id}"
 
 # ~~ log
@@ -165,8 +172,8 @@ __output_GF_Fastq2 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_2" +
 #   Include Rules   #
 #####################
 
-#include : os.getcwd() + "/GetGenome.rules"
-#include : os.getcwd() + "/CreateIndex.rules"
+include : os.getcwd() + "/GetGenome.rules"
+include : os.getcwd() + "/CreateIndex.rules"
 #include : os.getcwd() + "/PrepareAnnotations.rules"
 #include : os.getcwd() + "/PrepareDexseqAnnotations.rules"
 include : os.getcwd() + "/GetFastq.rules"
@@ -183,7 +190,16 @@ include : os.getcwd() + "/GetFastq.rules"
 rule targets :
   input :
     __output_GF_Fastq1,
-    __output_GF_Fastq2
+    __output_GF_Fastq2,
+    __output_GG_Genome,
+    __output_CI_ChrL,
+    __output_CI_ChrNL,
+    __output_CI_Chr,
+    __output_CI_ChrS,
+    __output_CI_Genome,
+    __output_CI_GenomeP,
+    __output_CI_SA,
+    __output_CI_SAi
 #    __output_ADESX_Exon,
 #    __output_ADESX_Maplot,
 #    __output_ADESX_Dispersion,
