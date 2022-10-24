@@ -17,10 +17,10 @@ Chromosom :
 #  - "chr16"
 #  - "chr17"
 #  - "chr18"
-#  - "chr19"
+  - "chr19"
   - "chr20"
-#  - "chr21"
-#  - "chr22"
+  - "chr21"
+  - "chr22"
 #  - "chrM"
 #  - "chrX"
 #  - "chrY"
@@ -75,6 +75,7 @@ GetGenome :
   Repertory : Genome/
   Extension : .fa.gz
   Filename : genome
+  container : images/fastq-dump
   threads : 1
   version : 1
 
@@ -90,7 +91,7 @@ GetAnnot :
 GetFastq :
   Repertory : fastq-dump/
   Extension : .fastq
-  container : fastq-dump
+  container : images/fastq-dump
   threads : 1
   version : 1
 

@@ -1,6 +1,6 @@
 __threads_GF = config["GetFastq"]["threads"]
 __version_GF = config["GetFastq"]["version"]
-__container_GF = "./" + config["GetFastq"]["Repertory"] + config["GetFastq"]["container"]
+__container_GF = "./" + config["GetFastq"]["container"]
 __params_GF_Repertory = config["GetFastq"]["Repertory"]
 
 #####

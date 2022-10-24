@@ -15,6 +15,7 @@
 * [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 * [Subread](https://subread.sourceforge.net/)
 * [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+* [Samtools](http://www.htslib.org/)
 
 ### Articles
 * [Recurrent mutations at codon 625 of the splicing factor SF3B1 in uveal melanoma](https://pubmed.ncbi.nlm.nih.gov/23313955/)

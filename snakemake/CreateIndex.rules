@@ -12,7 +12,8 @@ rule CreateIndex :
   
   params :
     repertory = __params_CI_Repertory,
-    ref_repertory = __params_CI_Repertory_Ref
+    ref_repertory = __params_CI_Repertory_Ref,
+    chr = __params_CI_Chromosom
     
   output :
     ChrL =__output_CI_ChrL,
@@ -41,6 +42,16 @@ rule CreateIndex :
     err = __stderr_CI
 
   shell :
-    "gunzip -c {params.ref_repertory}*.fa.gz > {params.ref_repertory}ref.fa 2> {log.err}; \
-    STAR --runThreadN 10 --runMode genomeGenerate --genomeDir {params.repertory} --genomeFastaFiles {params.ref_repertory}ref.fa 1> {log.out} 2> {log.err};\
-    rm {params.ref_repertory}ref.fa 1> {log.out} 2> {log.err}"
+    "for chr in {params.chr}; do \
+        gunzip -c {params.ref_repertory}$chr.fa.gz > {params.ref_repertory}$chr.fa 2> {log.err}; \
+    done; \
+    gunzip -c {params.ref_repertory}chr*.fa.gz > {params.ref_repertory}ref.fa 2> {log.err}; \
+    STAR --runThreadN 8 --runMode genomeGenerate --genomeSAindexNbases 12 --genomeDir {params.repertory} --genomeFastaFiles {params.ref_repertory}ref.fa 1> {log.out} 2> {log.err};\
+    rm {params.ref_repertory}chr*.fa 1> {log.out} 2> {log.err}"
+
+#     STAR --runThreadN 8 --runMode genomeGenerate --genomeSAindexNbases 13 --genomeDir {params.repertory} --genomeFastaFiles {params.ref_repertory}chr1.fa  {params.ref_repertory}chr2.fa 1> {log.out} 2> {log.err};\
+#    "for chr in {params.chr}; do \
+#        gunzip -c {params.ref_repertory}$chr.fa.gz > {params.ref_repertory}$chr.fa 2> {log.err}; \
+#    done; \
+#        STAR --runThreadN 10 --runMode genomeGenerate --genomeDir {params.repertory} --genomeFastaFiles {params.ref_repertory}ref.fa 1> {log.out} 2> {log.err};\
+#    rm {params.ref_repertory}ref.fa 1> {log.out} 2> {log.err}"

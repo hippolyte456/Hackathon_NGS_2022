@@ -6,7 +6,7 @@ FROM: ubuntu:22.04
     # Install Dependancies
     apt-get update
     apt-get install -y tar wget
-    apt-get install sra-toolkit
+    apt-get install -y sra-toolkit
 
     # FASTQ DUMP
    # wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz

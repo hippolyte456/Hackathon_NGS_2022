@@ -10,14 +10,19 @@ import sys
 #####################
 
 # ~~ parameters depending on inputs
-__params_GG_Chromosom = "chr20"
+__params_GG_Chromosom = lambda wildcard : config["Chromosom"]
 
 # ~~ log
-__stdout_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "chr20" + config["Log"]["Extension"]["Out"]
-__stderr_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + "chr20" + config["Log"]["Extension"]["Err"]
+__stdout_GG = []
+__stderr_GG = []
+__output_GG_Genome = []
+
+for chr in (config["Chromosom"]) :
+  __stdout_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + chr + config["Log"]["Extension"]["Out"]
+  __stderr_GG = config["Log"]["Repertory"] + config["GetGenome"]["Repertory"] + chr + config["Log"]["Extension"]["Err"]
 
 # ~~ output
-__output_GG_Genome = config["GetGenome"]["Repertory"] + "chr20" + config["GetGenome"]["Extension"]
+  __output_GG_Genome.append(config["GetGenome"]["Repertory"] + chr + config["GetGenome"]["Extension"])
 
 #######################
 ###   CreateIndex   ###
@@ -30,6 +35,7 @@ __input_CI_Genome = expand("{repertory}{filename}{extension}",
                             extension = config["GetGenome"]["Extension"])
 
 # ~~ parameters depending on inputs
+__params_CI_Chromosom = lambda wildcard : config["Chromosom"]
 
 # ~~ log
 __stdout_CI = config["Log"]["Repertory"] + config["CreateIndex"]["Repertory"] + config["CreateIndex"]["Filename"] + config["Log"]["Extension"]["Out"]
@@ -233,21 +239,23 @@ include : os.getcwd() + "/CountReads.rules"
 
 rule targets :
   input :
-#    __output_GF_Fastq1,
-#    __output_GF_Fastq2
+##    __output_GF_Fastq1,
+##    __output_GF_Fastq2
     __output_GG_Genome,
     __output_CI_ChrL,
-    __output_CI_ChrNL,
-    __output_CI_ChrN,
-    __output_CI_ChrS,
-    __output_CI_Genome,
-    __output_CI_GenomeP,
-    __output_CI_SA,
-#    __output_CI_SAi
-#    __output_MSTAR_bam,
-#    __output_GGA_Genome,
+    __output_MSTAR_bam,
     __output_Count_counts
-#    __output_PA_Annotation
+#    __output_CI_ChrNL,
+#    __output_CI_ChrN,
+#    __output_CI_ChrS,
+#    __output_CI_Genome,
+#    __output_CI_GenomeP,
+#    __output_CI_SA,
+##    __output_CI_SAi
+##    __output_MSTAR_bam,
+##    __output_GGA_Genome,
+#    __output_Count_counts
+###    __output_PA_Annotation
 #    __output_ADESX_Exon,
 #    __output_ADESX_Maplot,
 #    __output_ADESX_Dispersion,

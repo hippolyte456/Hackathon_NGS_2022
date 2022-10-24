@@ -1,7 +1,7 @@
 __threads_GG = config["GetGenome"]["threads"]
 __version_GG = config["GetGenome"]["version"]
 __output_GG_Repertory = config["GetGenome"]["Repertory"]
-__container_GF = "./" + config["GetFastq"]["Repertory"] + config["GetFastq"]["container"]
+__container_GF = "./" + config["GetFastq"]["container"]
 
 #####
 
@@ -30,7 +30,16 @@ rule GetGenome :
     err = __stderr_GG
 
   shell :
-    "wget -O {params.chr}.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/{params.chr}.fa.gz 1>{log.out} 2>{log.err}; \
-    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz "
+    "for chr in {params.chr}; do  \
+        i=$(echo $chr |  grep -Eo '[0-9]+$'); \
+        wget -O $chr.fa.gz https://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.$i.fa.gz 1>{log.out} 2>{log.err}; \
+        mv $chr.fa.gz {params.repertory}$chr.fa.gz; \
+    done"
+#    wget -O $chr.fa.gz https://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.1.fa.gz
+#    wget -O $chr.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/$chr.fa.gz 1>{log.out} 2>{log.err}; \
+#    mv $chr.fa.gz {params.repertory}$chr.fa.gz; \
+#    done"
+#    wget -O {params.chr}.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/{params.chr}.fa.gz 1>{log.out} 2>{log.err}; \
+#    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz "
 #    rm -rf {params.repertory}{params.chr}.fa.gz"
 #    gunzip -c {params.repertory}{params.chr}.fa.gz > {params.repertory}{params.chr}.fa 2> {log.err}; \
