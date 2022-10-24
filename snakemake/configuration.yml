@@ -108,9 +108,10 @@ PrepareDESeq2Annotations:
   version : 1
 
 MappingSTAR :
-  Repertory : ./Tools/images
-  Extension : .bam
+  Repertory : MappingSTAR/
+  Extension : .bam.bai
   Filename : star 
+  container : images/star
   threads : 1
   version : 1
 

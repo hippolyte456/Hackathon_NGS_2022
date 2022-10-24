@@ -34,10 +34,20 @@ rule GetFastq :
   shell :
     "prefetch -f yes {params.id} 1>{log.out} 2>{log.err}; \
     fasterq-dump {params.id}/{params.id}.sra 1>{log.out} 2>{log.err}; \
-    if test -f ./{params.id}.fastq ; then mv {params.id}.fastq {params.repertory}{params.id}.fastq 1>{log.out} 2>{log.err}; \
+    if ! test -d ./{params.repertory}{params.id}_1; then \
+      mkdir ./{params.repertory}{params.id}_1; \
     fi; \
-    if test -f ./{params.id}_1.fastq ; then mv {params.id}_1.fastq {params.repertory}{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
+    if ! test -d ./{params.repertory}{params.id}_2; then \
+      mkdir ./{params.repertory}{params.id}_2; \
     fi; \
-    if test -f ./{params.id}_2.fastq ; then mv {params.id}_2.fastq {params.repertory}{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
-    fi; \
+    mv {params.id}_1.fastq {params.repertory}{params.id}_1/{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
+    mv {params.id}_2.fastq {params.repertory}{params.id}_2/{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
     rm -rf {params.id}"
+
+#        if test -f ./{params.id}.fastq ; then mv {params.id}.fastq {params.repertory}{params.id}.fastq 1>{log.out} 2>{log.err}; \
+#    fi; \
+#    if test -f ./{params.id}_1.fastq ; then mv {params.id}_1.fastq {params.repertory}{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
+#    fi; \
+#    if test -f ./{params.id}_2.fastq ; then mv {params.id}_2.fastq {params.repertory}{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
+#    fi; \
+#     gzip {params.repertory}{params.id}_1.fastq {params.repertory}{params.id}_2.fastq; \

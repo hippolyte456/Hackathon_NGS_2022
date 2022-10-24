@@ -45,7 +45,10 @@ __output_CI_GenomeP = config["CreateIndex"]["Repertory"] + "genomeParameters.txt
 __output_CI_SA = config["CreateIndex"]["Repertory"] + "SA"
 __output_CI_SAi= config["CreateIndex"]["Repertory"] + "SAindex"
 
-#### PrepareAnnotations
+##############################
+###   PrepareAnnotations   ###
+##############################
+
 # ~~ input 
 #__input_PA_GTF =  config["Input"]["GTF"]
 #__input_PA_Table = config["Input"]["Table"]
@@ -87,25 +90,28 @@ __stdout_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SR
 __stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Err"]
 
 # ~~ output
-__output_GF_Fastq1 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_1" + config["GetFastq"]["Extension"])
-__output_GF_Fastq2 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_2" + config["GetFastq"]["Extension"])
+__output_GF_Fastq1 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_1")
+__output_GF_Fastq2 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_2")
 
-#### MappingSTAR
+#######################
+###   MappingSTAR   ###
+#######################
+
 # ~~ input
-#__input_MSTAR_fastq1 = __output_GF_Fastq1
-#__input_MSTAR_fastq2 = __output_GF_Fastq2
-#__input_MSTAR_index = __output_CI_SAi
-#
-## ~~ parameters depending on inputs
-#__params_MSTAR_NCBI_id = "{ncbi_id}"
-#
-## ~~ log
-#__stdout_MSTAR = config["Log"]["Repertory"] + config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + config["Log"]["Extension"]["Out"]
-#__stderr_MSTAR = config["Log"]["Repertory"] + config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + config["Log"]["Extension"]["Err"]
-#
-## ~~ output
-#__output_MSTAR_bam = temp(config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + config["MappingSTAR"]["Extension"])
-#
+__input_MSTAR_fastq1 = __output_GF_Fastq1
+__input_MSTAR_fastq2 = __output_GF_Fastq2
+__input_MSTAR_index = __output_CI_SAi
+
+# ~~ parameters depending on inputs
+__params_MSTAR_NCBI_id = "SRR628586"
+
+# ~~ log
+__stdout_MSTAR = config["Log"]["Repertory"] + config["MappingSTAR"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Out"]
+__stderr_MSTAR = config["Log"]["Repertory"] + config["MappingSTAR"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Err"]
+
+# ~~ output
+__output_MSTAR_bam = config["MappingSTAR"]["Repertory"] + "SRR628586" + config["MappingSTAR"]["Extension"]
+
 ##### IndexBam
 ## ~~ input
 #__input_IB_Bam = __output_MSTAR_bam
@@ -116,7 +122,7 @@ __output_GF_Fastq2 = temp(config["GetFastq"]["Repertory"] + "SRR628586" + "_2" +
 #
 ## ~~ output
 #__output_IB_Sorted_Bam = temp(config["IndexBam"]["Repertory"] + "{ncbi_id}" + config["IndexBam"]["Extension"])
-#
+
 ##### CountDEXSeq
 ## ~~ input
 #__input_CDEXS_bam = __output_IB_Sorted_Bam
@@ -177,7 +183,7 @@ include : os.getcwd() + "/CreateIndex.rules"
 #include : os.getcwd() + "/PrepareAnnotations.rules"
 #include : os.getcwd() + "/PrepareDexseqAnnotations.rules"
 include : os.getcwd() + "/GetFastq.rules"
-#include : os.getcwd() + "/MappingSTAR.rules"
+include : os.getcwd() + "/MappingSTAR.rules"
 #include : os.getcwd() + "/IndexBam.rules"
 #include : os.getcwd() + "/CountDEXSeq.rules"
 #include : os.getcwd() + "/InsertConditions.rules"
@@ -190,7 +196,7 @@ include : os.getcwd() + "/GetFastq.rules"
 rule targets :
   input :
 #    __output_GF_Fastq1,
-#    __output_GF_Fastq2,
+#    __output_GF_Fastq2
     __output_GG_Genome,
     __output_CI_ChrL,
     __output_CI_ChrNL,
@@ -199,7 +205,8 @@ rule targets :
     __output_CI_Genome,
     __output_CI_GenomeP,
     __output_CI_SA,
-    __output_CI_SAi
+#    __output_CI_SAi
+    __output_MSTAR_bam
 #    __output_ADESX_Exon,
 #    __output_ADESX_Maplot,
 #    __output_ADESX_Dispersion,
