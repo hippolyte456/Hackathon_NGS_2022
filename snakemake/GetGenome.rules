@@ -31,6 +31,6 @@ rule GetGenome :
 
   shell :
     "wget -O {params.chr}.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/{params.chr}.fa.gz 1>{log.out} 2>{log.err}; \
-    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz; \
-    gunzip -c {params.repertory}{params.chr}.fa.gz > {params.repertory}{params.chr}.fa ; \
-    rm -rf {params.repertory}{params.chr}.fa.gz"
+    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz "
+#    rm -rf {params.repertory}{params.chr}.fa.gz"
+#    gunzip -c {params.repertory}{params.chr}.fa.gz > {params.repertory}{params.chr}.fa 2> {log.err}; \

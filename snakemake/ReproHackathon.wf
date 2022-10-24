@@ -24,7 +24,7 @@ __output_GG_Genome = config["GetGenome"]["Repertory"] + "chr20" + config["GetGen
 #######################
 
 # ~~ input
-__input_CI_Genome = expaGetGenomend("{repertory}{filename}{extension}",
+__input_CI_Genome = expand("{repertory}{filename}{extension}",
                             repertory = config["GetGenome"]["Repertory"],
                             filename = config["Chromosom"],
                             extension = config["GetGenome"]["Extension"])
@@ -189,12 +189,12 @@ include : os.getcwd() + "/GetFastq.rules"
 
 rule targets :
   input :
-    __output_GF_Fastq1,
-    __output_GF_Fastq2,
+#    __output_GF_Fastq1,
+#    __output_GF_Fastq2,
     __output_GG_Genome,
     __output_CI_ChrL,
     __output_CI_ChrNL,
-    __output_CI_Chr,
+    __output_CI_ChrN,
     __output_CI_ChrS,
     __output_CI_Genome,
     __output_CI_GenomeP,

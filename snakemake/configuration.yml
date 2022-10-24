@@ -73,7 +73,7 @@ Log :
 
 GetGenome :
   Repertory : Genome/
-  Extension : .fa
+  Extension : .fa.gz
   Filename : genome
   threads : 1
   version : 1
