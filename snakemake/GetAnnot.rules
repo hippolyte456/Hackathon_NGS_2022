@@ -32,7 +32,8 @@ rule GetAnnot :
 
   shell :
     "wget -O {params.filename}.gtf.gz https://ftp.ensembl.org/pub/release-101/gtf/homo_sapiens/Homo_sapiens.{params.genome_ref}.101.chr.gtf.gz 1>{log.out} 2>{log.err}; \
-    mv {params.filename}.gtf.gz {params.repertory}{params.filename}.gtf.gz "   
+    mv {params.filename}.gtf.gz {params.repertory}{params.filename}.gtf.gz; \
+    gunzip -k -f GenomeAnnot/genome_annot.gtf.gz "   
 #    wget -O {params.chr}.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/{params.chr}.fa.gz 1>{log.out} 2>{log.err}; \
 #    mv {params.chr}.fa.gz {params.repertory}{params.chr}.fa.gz "
 ##    rm -rf {params.repertory}{params.chr}.fa.gz"

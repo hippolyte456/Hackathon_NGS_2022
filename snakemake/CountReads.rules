@@ -1,0 +1,44 @@
+__threads_Count = config["CountReads"]["threads"]
+__version_Count = config["CountReads"]["version"]
+__params_Count_GGA_Repertory = config["CreateIndex"]["Repertory"]
+__params_Count_Bam_Repertory = config["MappingSTAR"]["Repertory"]
+__params_Count_Repertory = config["CountReads"]["Repertory"]
+__container_Count = "./" + config["CountReads"]["container"]
+
+#####
+
+rule CountReads :
+  input :
+    bam = __input_Count_bam,
+    gga = __input_Count_GGA
+
+  params :
+    bam_repertory = __params_Count_Bam_Repertory,
+    GGA_Repertory = __params_Count_Bam_Repertory,
+    repertory = __params_Count_Repertory,
+    ncbi_id = __params_Count_NCBI_id
+
+  output :
+    counts = __output_Count_counts
+
+  message :
+    "Counts reads of {params.ncbi_id} with Subread"
+
+  threads :
+    __threads_Count
+
+  version :
+    __version_Count
+
+  singularity :
+    __container_Count
+
+  log :
+    out = __stdout_Count,
+    err = __stderr_Count
+
+  shell :
+     " echo {input.gga}; \
+     featureCounts -T 1 -t exon -g gene_id -s 0 -a ./{input.gga} -o {params.ncbi_id}.counts ./{input.bam}; \
+     mv {params.ncbi_id}.counts {params.repertory}{params.ncbi_id}.counts; \
+     mv {params.ncbi_id}.counts.summary {params.repertory}{params.ncbi_id}.counts.summary "

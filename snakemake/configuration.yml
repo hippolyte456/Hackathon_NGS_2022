@@ -80,7 +80,7 @@ GetGenome :
 
 GetAnnot :
   Repertory : GenomeAnnot/
-  Extension : .gtf.gz
+  Extension : .gtf
   Filename : genome_annot
   container : images/fastq-dump
   genome_ref : GRCh38
@@ -119,9 +119,17 @@ PrepareDESeq2Annotations:
 
 MappingSTAR :
   Repertory : MappingSTAR/
-  Extension : .bam.bai
+  Extension : .bam
   Filename : star 
   container : images/star
+  threads : 1
+  version : 1
+
+CountReads :
+  Repertory : CountReads/
+  Extension : .counts
+  Filename :  CountReads
+  container : images/subread
   threads : 1
   version : 1
 

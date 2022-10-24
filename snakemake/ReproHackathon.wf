@@ -95,9 +95,9 @@ __stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SR
 __output_GF_Fastq1 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_1")
 __output_GF_Fastq2 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_2")
 
-#########################
+###################
 ###   GetAnnot  ###
-#########################
+###################
 
 # ~~ parameters depending on inputs
 __params_GGA_genome_ref = config["GetAnnot"]["genome_ref"]
@@ -129,9 +129,23 @@ __stderr_MSTAR = config["Log"]["Repertory"] + config["MappingSTAR"]["Repertory"]
 # ~~ output
 __output_MSTAR_bam = config["MappingSTAR"]["Repertory"] + "SRR628586" + config["MappingSTAR"]["Extension"]
 
-#########################
-###   CountingReads  to do ###
-#########################
+######################
+###   CountReads   ###
+######################
+
+# ~~ input
+__input_Count_bam = __output_MSTAR_bam
+__input_Count_GGA = __output_GGA_Genome
+
+# ~~ parameters depending on inputs
+__params_Count_NCBI_id = "SRR628586"
+
+# ~~ log
+__stdout_Count = config["Log"]["Repertory"] + config["CountReads"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Out"]
+__stderr_Count = config["Log"]["Repertory"] + config["CountReads"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Err"]
+
+# ~~ output
+__output_Count_counts= config["CountReads"]["Repertory"] + "SRR628586" + config["CountReads"]["Extension"]
 
 
 ##### IndexBam
@@ -207,6 +221,7 @@ include : os.getcwd() + "/CreateIndex.rules"
 #include : os.getcwd() + "/PrepareDexseqAnnotations.rules"
 include : os.getcwd() + "/GetFastq.rules"
 include : os.getcwd() + "/MappingSTAR.rules"
+include : os.getcwd() + "/CountReads.rules"
 #include : os.getcwd() + "/IndexBam.rules"
 #include : os.getcwd() + "/CountDEXSeq.rules"
 #include : os.getcwd() + "/InsertConditions.rules"
@@ -229,8 +244,9 @@ rule targets :
     __output_CI_GenomeP,
     __output_CI_SA,
 #    __output_CI_SAi
-    __output_MSTAR_bam,
-    __output_GGA_Genome
+#    __output_MSTAR_bam,
+#    __output_GGA_Genome,
+    __output_Count_counts
 #    __output_PA_Annotation
 #    __output_ADESX_Exon,
 #    __output_ADESX_Maplot,

@@ -50,6 +50,5 @@ rule MappingSTAR :
      --limitBAMsortRAM 3000000000 > {params.ncbid_id}.bam 2> {log.err};\
     mv {params.ncbid_id}.bam {params.bam_repertory}{params.ncbid_id}.bam;\
     rm Log.* SJ.*; \
-    samtools index {params.bam_repertory}*.bam; \
-    rm {params.bam_repertory}{params.ncbid_id}.bam"
+    samtools index {params.bam_repertory}*.bam"
 #        samtools view -b -F 4 {params.ncbid_id}.bam > {params.bam_repertory}{params.ncbid_id}.bam;\
