@@ -17,26 +17,26 @@ Chromosom :
 #  - "chr16"
 #  - "chr17"
 #  - "chr18"
-  - "chr19"
-  - "chr20"
-  - "chr21"
+#  - "chr19"
+#  - "chr20"
+#  - "chr21"
   - "chr22"
 #  - "chrM"
 #  - "chrX"
 #  - "chrY"
 
 NCBI_id :
-  - SRR636533
-  - SRR636531
-  - SRR636532
-  - SRR628589
-  - SRR628588
-  - SRR628587
-  - SRR628586
-  - SRR628585
-  - SRR628584
-  - SRR628583
-  - SRR628582
+  - "SRR636533"
+  - "SRR636531"
+#  - "SRR636532"
+#  - "SRR628589"
+#  - "SRR628588"
+#  - "SRR628587"
+#  - "SRR628586"
+#  - "SRR628585"
+#  - "SRR628584"
+#  - "SRR628583"
+#  - "SRR628582"
   
 Individual_conditions :
   SRR628586 : WT

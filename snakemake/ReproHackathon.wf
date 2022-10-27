@@ -79,27 +79,30 @@ __output_CI_SAi= config["CreateIndex"]["Repertory"] + "SAindex"
 ## ~~ output
 #__output_PDEXSA_Annotation = config["PrepareDEXSeqAnnotations"]["Repertory"] + config["PrepareDEXSeqAnnotations"]["Filename"] + config["PrepareDEXSeqAnnotations"]["Extension"]
 
+
+
 ####################
 ###   GetFastq   ###
 ####################
 
 # ~~ parameters depending on inputs
-__input_ADEXS_counts = expand("{repertory}{filename}{extension}",
-                              repertory = config["InsertConditions"]["Repertory"],
-                              filename = config["NCBI_id"],
-                              extension = config["InsertConditions"]["Extension"])
-__params_IC_Condition = lambda wildcard : config["Individual_conditions"][wildcard.ncbi_id]
-__params_GF_NCBI_id = "SRR628586"
-#__params_GF_NCBI_id = lambda wildcard : config["NCBI_id"]
-#__params_IC_NCBI_id = "{ncbi_id}"
+# __params_IC_Condition = lambda wildcard : config["Individual_conditions"][wildcard.ncbi_id]
+# __params_GF_NCBI_id = "SRR628586"
+__params_GF_NCBI_id  = lambda wildcard : config["NCBI_id"]
 
 # ~~ log
-__stdout_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Out"]
-__stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + "SRR628586" + config["Log"]["Extension"]["Err"]
+__stdout_GF = []
+__stderr_GF = []
+__output_GF_Fastq1 = []
+__output_GF_Fastq2 = []
 
-# ~~ output
-__output_GF_Fastq1 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_1")
-__output_GF_Fastq2 = directory(config["GetFastq"]["Repertory"] + "SRR628586" + "_2")
+for ncbi_id in (config["NCBI_id"]) :
+  __stdout_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + ncbi_id + config["Log"]["Extension"]["Out"]
+  __stderr_GF = config["Log"]["Repertory"] + config["GetFastq"]["Repertory"] + ncbi_id + config["Log"]["Extension"]["Err"]
+
+  # ~~ output
+  __output_GF_Fastq1 = directory(config["GetFastq"]["Repertory"] + ncbi_id + "_1")
+  __output_GF_Fastq2 = directory(config["GetFastq"]["Repertory"] + ncbi_id + "_2")
 
 ###################
 ###   GetAnnot  ###
@@ -239,12 +242,12 @@ include : os.getcwd() + "/CountReads.rules"
 
 rule targets :
   input :
-##    __output_GF_Fastq1,
-##    __output_GF_Fastq2
-    __output_GG_Genome,
-    __output_CI_ChrL,
-    __output_MSTAR_bam,
-    __output_Count_counts
+    __output_GF_Fastq1,
+    __output_GF_Fastq2
+#    __output_GG_Genome,
+#    __output_CI_ChrL,
+#    __output_MSTAR_bam,
+#    __output_Count_counts
 #    __output_CI_ChrNL,
 #    __output_CI_ChrN,
 #    __output_CI_ChrS,

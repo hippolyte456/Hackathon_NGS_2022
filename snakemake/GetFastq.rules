@@ -8,8 +8,7 @@ __params_GF_Repertory = config["GetFastq"]["Repertory"]
 rule GetFastq : 
   params :
     id = __params_GF_NCBI_id,
-    test = __container_GF,
-    repertory = __params_GF_Repertory,
+    repertory = __params_GF_Repertory
   
   output :
     fastq_1 = __output_GF_Fastq1,
@@ -32,17 +31,33 @@ rule GetFastq :
     err = __stderr_GF
 
   shell :
-    "prefetch -f yes {params.id} 1>{log.out} 2>{log.err}; \
-    fasterq-dump {params.id}/{params.id}.sra 1>{log.out} 2>{log.err}; \
-    if ! test -d ./{params.repertory}{params.id}_1; then \
-      mkdir ./{params.repertory}{params.id}_1; \
-    fi; \
-    if ! test -d ./{params.repertory}{params.id}_2; then \
-      mkdir ./{params.repertory}{params.id}_2; \
-    fi; \
-    mv {params.id}_1.fastq {params.repertory}{params.id}_1/{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
-    mv {params.id}_2.fastq {params.repertory}{params.id}_2/{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
-    rm -rf {params.id}"
+    " _1=_1; \
+    _2=_2;\
+    for ide in {params.id}; do \
+      prefetch -f yes $ide 1>{log.out} 2>{log.err}; \
+      fasterq-dump $ide/$ide.sra 1>{log.out} 2>{log.err}; \
+      if ! test -d ./{params.repertory}$ide$_1; then \
+        mkdir ./{params.repertory}$ide$_1; \
+      fi; \
+      if ! test -d ./{params.repertory}$ide$_2; then \
+        mkdir ./{params.repertory}$ide$_2; \
+      fi; \
+      mv $ide$_1.fastq {params.repertory}$ide$_1/$ide$_1.fastq 1>{log.out} 2>{log.err}; \
+      mv $ide$_2.fastq {params.repertory}$ide$_2/$ide$_2.fastq 1>{log.out} 2>{log.err}; \
+      rm -rf $ide; \
+    done"
+
+#    prefetch -f yes {params.id} 1>{log.out} 2>{log.err}; \
+#    fasterq-dump {params.id}/{params.id}.sra 1>{log.out} 2>{log.err}; \
+#    if ! test -d ./{params.repertory}{params.id}_1; then \
+#      mkdir ./{params.repertory}{params.id}_1; \
+#    fi; \
+#    if ! test -d ./{params.repertory}{params.id}_2; then \
+#      mkdir ./{params.repertory}{params.id}_2; \
+#    fi; \
+#    mv {params.id}_1.fastq {params.repertory}{params.id}_1/{params.id}_1.fastq 1>{log.out} 2>{log.err}; \
+#    mv {params.id}_2.fastq {params.repertory}{params.id}_2/{params.id}_2.fastq 1>{log.out} 2>{log.err}; \
+#    rm -rf {params.id}"
 
 #        if test -f ./{params.id}.fastq ; then mv {params.id}.fastq {params.repertory}{params.id}.fastq 1>{log.out} 2>{log.err}; \
 #    fi; \

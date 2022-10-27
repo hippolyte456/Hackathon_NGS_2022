@@ -5,7 +5,7 @@
 
 ## Snakemake
 
-### Using Anaconda (didn' work for me)
+### Using Anaconda (didn't work for me)
 ```bash
 conda activate base
 mamba create -c conda-forge -c bioconda -n snakemake snakemake
