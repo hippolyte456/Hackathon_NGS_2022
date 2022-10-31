@@ -38,7 +38,13 @@ rule CountReads :
     err = __stderr_Count
 
   shell :
-     " echo {input.gga}; \
-     featureCounts -T 1 -t exon -g gene_id -s 0 -a ./{input.gga} -o {params.ncbi_id}.counts ./{input.bam}; \
-     mv {params.ncbi_id}.counts {params.repertory}{params.ncbi_id}.counts; \
-     mv {params.ncbi_id}.counts.summary {params.repertory}{params.ncbi_id}.counts.summary "
+     "dest=MappingSTAR/ ;\
+     echo {input.bam};\
+     echo {params.ncbi_id};\
+     for id in {params.ncbi_id}; do \
+        echo {input.gga}; \
+        echo ./$dest$id.bam ;\
+        featureCounts -T 1 -t exon -g gene_id -s 0 -a ./{input.gga} -o $id.counts $dest$id.bam; \
+        mv $id.counts {params.repertory}$id.counts; \
+        mv $id.counts.summary {params.repertory}$id.counts.summary; \
+    done"

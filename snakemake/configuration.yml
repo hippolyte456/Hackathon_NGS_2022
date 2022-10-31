@@ -26,9 +26,9 @@ Chromosom :
 #  - "chrY"
 
 NCBI_id :
-  - "SRR636533"
-  - "SRR636531"
-#  - "SRR636532"
+#  - "SRR636533"
+#  - "SRR636531"
+  - "SRR636532"
 #  - "SRR628589"
 #  - "SRR628588"
 #  - "SRR628587"
@@ -37,7 +37,7 @@ NCBI_id :
 #  - "SRR628584"
 #  - "SRR628583"
 #  - "SRR628582"
-  
+#  
 Individual_conditions :
   SRR628586 : WT
 # SRR636533 : WT
