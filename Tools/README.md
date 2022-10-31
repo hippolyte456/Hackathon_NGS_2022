@@ -6,8 +6,8 @@
 * A subdirectory for images (absent by default)
 * A subdirectory doc with the documentation on each tools (To do)
 * A Singularity.tools script generating an image with all the tools directly (To be deleted)
-* A script images.sh generating all the images in image's folder
-* A README file
+* A script "[images.sh](./images.sh)" generating all the images in image's folder
+* A [README](./README.md) file
 
 ## Useful links
 

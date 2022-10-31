@@ -15,6 +15,28 @@ The goal is to reproduce parts of the analysis described in these papers (to rea
 They performed <a href="https://en.wikipedia.org/wiki/RNA-Seq" target="_blank">RNA-Seq</a> in samples from patients with uveal melanoma. Some samples are mutated in SF3B1 .
 We want to analyze this data in order to find <a href="https://en.wikipedia.org/wiki/RNA-Seq#Differential_expression" target="_blank">differentially expressed genes</a>, i.e. genes that are more (or less) expressed in one condition (SF3B1 mutated samples) compared to another (SF3B1 non mutated samples).
 
+## Organization
+
 To do this, we have designed and implemented a reproductible workflow.<br>
-1. This workflow uses containers that can be generated from this git directory (see ["Tools"](Tools/README.md))<br>
-2. The workflow is set up with the Snakemake tool (see  ["Workflow"](snakemake/README.md))<br>
+* A Directory [Tools](./Tools/) to build all containers (using Singularity) with the tools that will be used in the workflow.
+* A Directory [Workflow](./Workflow/) with the rules and files (using Snakemake) needed for the workflow.
+* A Directory [Doc] with documents about this project. (TO DO)
+* A Script "run.sh" to execute the workflow. (TO DO)
+* A [README](./README.md) file
+
+## About IFB Cloud
+
+"French Institute of Bioinformatics ([IFB](https://www.france-bioinformatique.fr/cloud-ifb/)) provides life scientists with a federation of clouds, Biosphere, and bioinformatics cloud services to analyze life science data. Biosphere is used for scientific production in the life sciences, developments, and to support events like cloud and scientific training sessions, hackathons or workshops."
+
+### Setting up a VM
+
+[IFB Cloud Biosphere](https://biosphere.france-bioinformatique.fr/)
+
+For the moment the pipeline work for a VM BioPipes "ifb..mxlarge (24 vCPU, 96Go GB RAM, 600Go local Disk)"
+
+It's a bit much, but at least it works. We will try to reduce the need for capacity and adapt our workflow to reduce the VM.
+
+## Run the workflow
+```bash
+./run.sh
+```

@@ -1,7 +1,19 @@
-# Environment setup
+# Workflow
+
+## Organization
+
+* A subdirectory for each output of each rule (absent by default)
+* A subdirectory "images" containing all the images of the tools (absent by default, you will have to copy it from "[Tools](../Tools/)")
+* A subdirectory "[rules](./rules/)" with all the rules used in the workflow (one file per rule).
+* A file "[configuration.yml](./configuration.yml)" containing all the necessary configurations for Reprochackthon.wf.
+* A Snakefile "[ReproHackathon.wf](./ReproHackathon.wf)" with the workflow.
+* A [README](./README.md) file
+
+## Setup
 
 ## Singularity 
-* [Singularity](https://singularity-tutorial.github.io/01-installation/)
+
+You can check the read-me from [Tools](../Tools/) about [Singularity](../Tools/README.md/#install-singularity) installation.
 
 ## Snakemake
 
@@ -26,7 +38,7 @@ from the source of the git directory run
 ```bash
 cd Tools
 ./images.sh
-cp Tools/images/star snakemake/images/star
+cp -r Tools/images Worflow/images
 ```
 
 # Execution
@@ -44,9 +56,10 @@ snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configur
  * MappingSTAR : Map the DNA seq with index result (doesn't seem to work yet, i mean the workflow is good but the result of the counting show 0 aligment ...)
 
 ## Next work
- * Scaling-up GetFastq.rules to accept multiple Seq list (as GetGenome)
- * Fix issue with CreateIndex and too heavy files
- * Fix issue with Mapping Result
+ * Scaling-up GetFastq.rules to accept multiple Seq list (as GetGenome) (Done)
+ * Fix issue with CreateIndex and too heavy files  (Done)
+ * Fix issue with Mapping Result (Done)
  * Remove plointless code (cleaning code)
- * Improve README files
+ * Improve README files (Work in progress)
  * Once everything is good we will be able to move on DESeq2 script
+ * Try with lower VM capacity
