@@ -1,0 +1,157 @@
+import os
+import sys
+
+#######################
+#   Define Workflow   #
+#######################
+
+#--------------------#
+#   GetFastq files   #
+#--------------------#
+
+# Téléchargement des fichiers sra à partir de la liste des SRAID
+
+# ~~ parameters depending on inputs
+__container_GF = "./" + config["GetFastq"]["container"]
+__repertory_GF = config["GetFastq"]["Repertory"]
+__ncbi_id = lambda wildcard : config["NCBI_id"]
+
+# ~~ output
+__output_GF = ["{path}{n}/{n}.sra".format(path=config["GetFastq"]["Repertory"], n=ncbi_id) for (ncbi_id) in config["NCBI_id"]]
+
+
+#-------------------#
+#   dumpFastq SRA   #
+#-------------------#
+
+# Conversion des fichiers SRA en fichier FATSQ compressé
+
+# ~~ parameters depending on inputs
+__input_DF = __output_GF
+__container_DF = "./" + config["GetFastq"]["container"]
+__repertory_DF = config["GetFastq"]["Repertory"]
+
+# ~~ output
+__output_DF_1 = ["{path}{n}/{n}_1.fastq".format(path=config["GetFastq"]["Repertory"], n=ncbi_id) for (ncbi_id) in config["NCBI_id"]]
+__output_DF_2 = ["{path}{n}/{n}_2.fastq".format(path=config["GetFastq"]["Repertory"], n=ncbi_id) for (ncbi_id) in config["NCBI_id"]]
+
+
+#---------------#
+#   GetGenome   #
+#---------------#
+
+# Conversion des fichiers SRA en fichier FATSQ compressé
+# Unzip chr* and concact chr* in ref.fa
+
+# ~~ parameters depending on inputs
+__container_GG = "./" + config["GetGenome"]["container"]
+__repertory_GG = config["GetGenome"]["Repertory"]
+__chr_GG = lambda wildcard : config["Chromosom"]
+
+# ~~ output
+__output_GG_fa_gz = ["{path}{n}.fa.gz".format(path=config["GetGenome"]["Repertory"], n=chr) for (chr) in config["Chromosom"]]
+__output_GG_ref = config["GetGenome"]["Repertory"] + "ref.fa"
+
+#-----------------#
+#   IndexGenome   #
+#-----------------#
+
+# Indexation du génome humain à partir du fichier avec les séquences des chromosomes concaténées
+
+# ~~ parameters depending on inputs
+__input_IF = __output_GG_ref
+__container_IG = "./" + config["IndexGenome"]["container"]
+__repertory_IG = config["IndexGenome"]["Repertory"]
+
+# ~~ output
+__output_CI_ChrL = config["IndexGenome"]["Repertory"] + "chrLength.txt"
+__output_CI_ChrNL = config["IndexGenome"]["Repertory"] + "chrNameLength.txt"
+__output_CI_ChrN = config["IndexGenome"]["Repertory"] + "chrName.txt"
+__output_CI_ChrS = config["IndexGenome"]["Repertory"] + "chrStart.txt"
+__output_CI_Genome = config["IndexGenome"]["Repertory"] + "Genome"
+__output_CI_GenomeP = config["IndexGenome"]["Repertory"] + "genomeParameters.txt"
+__output_CI_SA = config["IndexGenome"]["Repertory"] + "SA"
+__output_CI_SAi= config["IndexGenome"]["Repertory"] + "SAindex"
+
+#-----------------#
+#   MappingSTAR   #
+#-----------------#
+
+# Mapping des fichiers FASTQ compressés avec le génome index (alignement des séquences avec le génôme humain) 
+
+# ~~ parameters depending on inputs
+__input_MS_1 = __output_DF_1
+__input_MS_2 =__output_DF_2
+__container_MS = "./" + config["MappingSTAR"]["container"]
+__repertory_MS = config["MappingSTAR"]["Repertory"]
+
+__input_MS = []
+for fastq_1,fastq_2 in zip(__output_DF_1,__output_DF_2) :
+    __input_MS.append(fastq_1 + "," + fastq_2)
+
+
+# ~~ output
+__output_MSTAR_bam = ["{path}{n}.bam".format(path=config["MappingSTAR"]["Repertory"], n=ncbi_id) for (ncbi_id) in config["NCBI_id"]]
+
+rule MappingSTAR :
+    input :
+        fastq_1 = __input_MS_1,
+        fastq_2 = __input_MS_2
+
+    params :
+        MS_Repertory = __repertory_MS,
+        fastq = __input_MS,
+        ncbi_id =  __ncbi_id,
+        FQ_Repertory = __repertory_GF,
+        IG_Repertory = __repertory_IG
+
+
+    output :
+        output_MSTAR_bam = __output_MSTAR_bam
+
+    message :
+        "Mapping on {input.fastq_1} {input.fastq_2} with STAR"
+
+    singularity :
+        __container_MS  
+ 
+    shell :
+        "CPU=$(grep -c ^processor /proc/cpuinfo) ;\
+        _1=_1 ;\
+        _2=_2 ;\
+        for ncbi_id in {params.ncbi_id}; do \
+            STAR --outSAMstrandField intronMotif \
+                --outFilterMismatchNmax 4 \
+                --outFilterMultimapNmax 10 \
+                --genomeDir {params.IG_Repertory} \
+                --readFilesIn {params.FQ_Repertory}$ncbi_id/$ncbi_id$_1.fastq {params.FQ_Repertory}$ncbi_id/$ncbi_id$_2.fastq \
+                --runThreadN $CPU \
+                --outSAMunmapped None \
+                --outSAMtype BAM SortedByCoordinate \
+                --outStd BAM_SortedByCoordinate \
+                --genomeLoad NoSharedMemory \
+            > {params.MS_Repertory}$ncbi_id.bam ;\
+        done"
+
+# Need to find a way to get the perfect limitBAMsortBam according to the server where it is running
+
+#####################
+#   Include Rules   #
+#####################
+
+include : os.getcwd() + "/rules/GetFastq.rules"
+include : os.getcwd() + "/rules/DumpFastq.rules"
+include : os.getcwd() + "/rules/GetGenome.rules"
+include : os.getcwd() + "/rules/IndexGenome.rules"
+
+###################
+#   Rule Target   #
+###################
+
+rule targets :
+    input :
+        __output_CI_ChrL,
+        __output_MSTAR_bam
+        
+    message :
+        "All the workflow is done !!"

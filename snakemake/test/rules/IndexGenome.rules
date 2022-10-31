@@ -1,0 +1,29 @@
+rule IndexGenome :
+    input :
+        genome = __input_IF
+
+    params :
+       IG_Repertory = __repertory_IG
+
+    output :
+        ChrL =__output_CI_ChrL,
+        ChrNL = __output_CI_ChrNL,
+        ChrN = __output_CI_ChrN,
+        ChrS = __output_CI_ChrS,
+        Genome = __output_CI_Genome,
+        GenomeP = __output_CI_GenomeP,
+        SA = __output_CI_SA,
+        SAi = __output_CI_SAi
+
+    message :
+        "Creating index from {input.genome}"
+
+    singularity :
+        __container_IG  
+ 
+    shell :
+        "CPU=$(grep -c ^processor /proc/cpuinfo) ;\
+        STAR --runThreadN $CPU \
+             --runMode genomeGenerate \
+             --genomeDir {params.IG_Repertory}    \
+             --genomeFastaFiles {input.genome}"
