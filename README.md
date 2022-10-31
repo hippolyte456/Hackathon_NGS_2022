@@ -1,4 +1,4 @@
-# Projet Repro-Hackathon
+# Project Repro-Hackathon
 
 Project of the Master of Bioinformatics (AMI2B) of the University Paris-Saclay realized by : <br>
 * <a href="https://github.com/JudithCo" target="_blank">Judith Coutrot </a> <br>
