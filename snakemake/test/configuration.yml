@@ -26,18 +26,18 @@ Chromosom :
   - "Y"
 
 NCBI_id :
-#  - "SRR636533"
-#  - "SRR636531"
+  - "SRR636533"
+  - "SRR636531"
   - "SRR636532"
-#  - "SRR628589"
-#  - "SRR628588"
-#  - "SRR628587"
-#  - "SRR628586"
-#  - "SRR628585"
-#  - "SRR628584"
-#  - "SRR628583"
-#  - "SRR628582"
-#  
+  - "SRR628589"
+  - "SRR628588"
+  - "SRR628587"
+  - "SRR628586"
+  - "SRR628585"
+  - "SRR628584"
+  - "SRR628583"
+  - "SRR628582"
+  
 Individual_conditions :
   SRR628586 : WT
 # SRR636533 : WT
@@ -61,16 +61,9 @@ Individual_conditions :
 #  SRR628588 : WT
 #  SRR628589 : WT
 
-Log :  
-  Repertory : Log/  
-  Extension : 
-    Out : .out
-    Err : .err
-
 GetFastq :
   Repertory : fastq-dump/
   container : images/fastq-dump
-
 
 GetGenome :
   Repertory : Genome/

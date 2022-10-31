@@ -1,4 +1,6 @@
-## Proposed organization
+# Tools
+
+## Organization
 
 * One subdirectory per tool containing a script and a README
 * A subdirectory for images (absent by default)
@@ -23,29 +25,45 @@
 
 ## Useful commands
 
+### Install Singularity
+
+For Ubuntu :
+
+```bash
+sudo apt-get update
+
+sudo apt-get install -y build-essential libssl-dev uuid-dev libgpgme11-dev \
+    squashfs-tools libseccomp-dev wget pkg-config git cryptsetup 
+```
+
+```bash
+wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz
+
+sudo tar --directory=/usr/local -xzvf go1.13.linux-amd64.tar.gz
+
+export PATH=/usr/local/go/bin:$PATH
+```
+
+```bash
+wget https://github.com/singularityware/singularity/releases/download/v3.5.3/singularity-3.5.3.tar.gz
+
+tar -xzvf singularity-3.5.3.tar.gz
+```
+
+```bash
+cd singularity
+
+./mconfig
+
+cd builddir
+
+make
+
+sudo make install
+```
+
 ### Generate images
 ```bash
 ./images.sh
 ```
 Please do not commit images on the git repository.
-
-### Downloading FASTQ files
-```bash
-for sraid in MM089T SRR628583 SRR628584 SRR628585 SRR628586 SRR628587 SRR628588 SRR628589
-do
-wget  -O ${SRAID}.sra https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos1/sra-pub-run-5/${SRAID}/${SRAID}.1
-fastq-dump --gzip --split-files ./${SRAID}.sra
-done
-```
-
-### Dowloading Chromosomes Sequences
-
-### Creating Genome Index
-
-### Getting genome annotations (GFF)
-
-### Mapping FastQ files
-
-### Counting reads
-
-### Statistical analysis (differential gene expression)
