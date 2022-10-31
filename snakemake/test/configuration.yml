@@ -87,21 +87,6 @@ IndexGenome:
   Repertory : IndexGenome/
   container : images/star
 
-PrepareAnnotations:
-  Repertory : PrepareAnnotations/
-  Extension : .gtf
-  Filename : PrepareAnnotations
-  container : images/subread
-  threads : 1
-  version : 1
-
-PrepareDESeq2Annotations:
-  Repertory : ../Tools/images
-  Extension : .gtf
-  Filename : DESeq 
-  threads : 1
-  version : 1
-
 MappingSTAR :
   Repertory : MappingSTAR/
   container : images/star
@@ -111,31 +96,3 @@ CountReads :
   Extension : .counts
   Filename :  CountReads
   container : images/subread
-  threads : 1
-  version : 1
-
-IndexBam :
-  Repertory : IndexBam/
-  Extension : .sorted.bam
-  samtools : /bin/samtools/
-  threads : 1
-  version : 1
-
-CountDEXSeq : 
-  Repertory : CountDEXSeq/
-  Extension : .counts
-  threads : 1
-  version : 1
-
-InsertConditions : 
-  Repertory : InsertConditions/
-  Extension : .counts
-  threads : 1
-  version : 1
-
-AnalysisDEXSeq : 
-  Repertory : AnalysisDEXSeq/
-  Extension : .spliced
-  Filename : AnalysisDEXSeq
-  threads : 1
-  version : 1

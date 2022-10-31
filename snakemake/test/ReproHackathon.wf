@@ -95,6 +95,36 @@ __output_MSTAR_bam = ["{path}{n}.bam".format(path=config["MappingSTAR"]["Reperto
 
 # Need to find a way to get the perfect limitBAMsortBam according to the server where it is running
 
+#--------------#
+#   GetAnnot   #
+#--------------#
+
+# ~~ parameters depending on inputs
+__genome_ref_GA = config["GetAnnot"]["genome_ref"]
+__file_name_GA = config["GetAnnot"]["Filename"]
+__container_GA = "./" + config["GetAnnot"]["container"]
+__repertory_GA = config["GetAnnot"]["Repertory"]
+
+# ~~ output
+__output_GA_Genome = config["GetAnnot"]["Repertory"] + config["GetAnnot"]["Filename"] + ".gtf"
+
+#----------------#
+#   CountReads   #
+#----------------#
+
+# ~~inputs
+__gtf_CR = __output_GA_Genome
+__mapping_CR = __output_MSTAR_bam
+
+# ~~ parameters depending on inputs
+__file_name_CR = config["CountReads"]["Filename"]
+__container_CR = "./" + config["CountReads"]["container"]
+__repertory_CR = config["CountReads"]["Repertory"]
+
+# ~~ output
+__output_CR = config["CountReads"]["Repertory"] + config["CountReads"]["Filename"] + ".counts"
+
+
 #####################
 #   Include Rules   #
 #####################
@@ -104,6 +134,8 @@ include : os.getcwd() + "/rules/DumpFastq.rules"
 include : os.getcwd() + "/rules/GetGenome.rules"
 include : os.getcwd() + "/rules/IndexGenome.rules"
 include : os.getcwd() + "/rules/MappingStar.rules"
+include : os.getcwd() + "/rules/GetAnnot.rules"
+include : os.getcwd() + "/rules/CountReads.rules"
 
 ###################
 #   Rule Target   #
@@ -112,8 +144,10 @@ include : os.getcwd() + "/rules/MappingStar.rules"
 rule targets :
     input :
         __output_CI_ChrL,
-	__output_GG_fa_gz,
-        __output_MSTAR_bam
+	    __output_GG_fa_gz,
+        __output_MSTAR_bam,
+        __output_GA_Genome,
+        __output_CR
         
     message :
         "All the workflow is done !!"
