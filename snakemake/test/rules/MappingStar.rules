@@ -1,0 +1,40 @@
+rule MappingSTAR :
+    input :
+        fastq_1 = __input_MS_1,
+        fastq_2 = __input_MS_2
+
+    params :
+        MS_Repertory = __repertory_MS,
+        fastq = __input_MS,
+        ncbi_id =  __ncbi_id,
+        FQ_Repertory = __repertory_GF,
+        IG_Repertory = __repertory_IG
+
+
+    output :
+        output_MSTAR_bam = __output_MSTAR_bam
+
+    message :
+        "Mapping on {input.fastq_1} {input.fastq_2} with STAR"
+
+    singularity :
+        __container_MS  
+ 
+    shell :
+        "CPU=$(grep -c ^processor /proc/cpuinfo) ;\
+        _1=_1 ;\
+        _2=_2 ;\
+        for ncbi_id in {params.ncbi_id}; do \
+            STAR --outSAMstrandField intronMotif \
+                --outFilterMismatchNmax 4 \
+                --outFilterMultimapNmax 10 \
+                --genomeDir {params.IG_Repertory} \
+                --readFilesIn {params.FQ_Repertory}$ncbi_id/$ncbi_id$_1.fastq {params.FQ_Repertory}$ncbi_id/$ncbi_id$_2.fastq \
+                --runThreadN 19 \
+                --outSAMunmapped None \
+                --outSAMtype BAM SortedByCoordinate \
+                --outStd BAM_SortedByCoordinate \
+                --genomeLoad NoSharedMemory \
+            > {params.MS_Repertory}$ncbi_id.bam ;\
+        done"
+

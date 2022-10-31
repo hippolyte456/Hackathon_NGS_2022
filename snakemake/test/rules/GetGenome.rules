@@ -15,7 +15,6 @@ rule GetGenome :
  
     shell :
         "for chr in {params.chr}; do  \
-            i=$(echo $chr |  grep -Eo '[0-9]+$'); \
-            wget -O {params.GG_Repertory}$chr.fa.gz https://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.$i.fa.gz ; \
+            wget -O {params.GG_Repertory}$chr.fa.gz https://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.$chr.fa.gz ; \
         done ;\
-        gunzip -c {params.GG_Repertory}chr*.fa.gz > {params.GG_Repertory}ref.fa"
+        gunzip -c {params.GG_Repertory}*.fa.gz > {params.GG_Repertory}ref.fa"
