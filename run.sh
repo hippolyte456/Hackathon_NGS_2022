@@ -110,7 +110,7 @@ cd ./Tools
 ./images.sh
 # 3.2 Export ./Tools/Images to ./Workflow/images or change config file (less memory need)
 cd ..
-cp -r ./Tools/images ./Workflow/images
+cp -r ./Tools/images ./Workflow/
 if ls Workflow/images &>/dev/null  ;
 then
     echo -e -n "$GREEN Images generation has been successfully executed"  | sort

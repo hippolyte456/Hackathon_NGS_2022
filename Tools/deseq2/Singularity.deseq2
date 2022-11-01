@@ -10,9 +10,10 @@ FROM: ubuntu:22.04
     apt install -y r-base
 
     # DESeq2
-    R -e 'if (!require("BiocManager", quietly = TRUE))
+    R -e 'install.packages("FactoMineR")
+        if (!require("BiocManager", quietly = TRUE))
             install.packages("BiocManager")
             BiocManager::install("DESeq2")'
- 
+             
     # Cleaning
     apt-get autoremove -y && apt-get clean

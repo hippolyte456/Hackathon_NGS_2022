@@ -44,7 +44,7 @@ do
         if [ $var -gt 0 ]
         then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
-            sudo singularity build ./images/${name} ./${name}/Singularity.${name} &>/dev/null
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
             rm ./.logscript/Singularity.${name} &>/dev/null
             cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name} &>/dev/null
         fi
@@ -53,7 +53,7 @@ do
     if [ $var -gt 0 ] && ([ $var1 -eq 0 ] || [ $var2 -eq 0 ]) 
     then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
-            sudo singularity build ./images/${name} ./${name}/Singularity.${name} &>/dev/null
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
             rm ./.logscript/Singularity.${name} &>/dev/null
             cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name} &>/dev/null
     fi
