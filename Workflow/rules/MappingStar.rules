@@ -35,6 +35,6 @@ rule MappingSTAR :
                 --outSAMtype BAM SortedByCoordinate \
                 --outStd BAM_SortedByCoordinate \
                 --genomeLoad NoSharedMemory \
-            > {params.MS_Repertory}$ncbi_id.bam ;\
+            > $ncbi_id ;\
         done"
 

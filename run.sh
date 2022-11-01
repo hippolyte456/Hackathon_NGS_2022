@@ -81,7 +81,7 @@ else
     echo -e -n "$PURPLE Snakemake not here, downloading ... $EOC" | sort
     pip install snakemake &>/dev/null
     # 2.2 Find path to snakemake (find / snakemake | grep bin/snakemake)
-    SNAK_PATH=$(sudo find / snakemake 2>/dev/null | grep bin/snakemake | awk 'NR==1{print $1}' | awk -F 'bin/' '{print $1 FS "/snakemake"}')
+    SNAK_PATH=$(sudo find / snakemake 2>/dev/null | grep bin/snakemake | awk 'NR==1{print $1}' | awk -F 'bin/' '{print $1 FS}')
     # 2.3 Export Path
     export PATH=$PATH:$SNAK_PATH
     if which snakemake &>/dev/null ;
@@ -93,6 +93,25 @@ else
         exit 1
     fi
 fi
+
+# Error need to check if snakemake work. in file snakemake/deployment/singularity.py comparaison between int and str. Need to change the file line 70 and add str()
+# sudo find / snakemake | grep snakemake/deployment/singularity.py
+#if not LooseVersion(v)) >= LooseVersion("2.4.1"):
+
+#if not str(LooseVersion(v)) >= str(LooseVersion("2.4.1")):
+
+# sed -i 's/old-text/new-text/g' input.txt
+# sed -i 's/if not LooseVersion(v)) >= LooseVersion("2.4.1"):/if not str(LooseVersion(v)) >= str(LooseVersion("2.4.1")):/g' /home/ubuntu/.local/lib/python3.8/site-packages/snakemake/deployment/singularity.py
+# sed -i 's/if not str(LooseVersion(v)) >= str(LooseVersion("2.4.1")):/if not LooseVersion(v)) >= LooseVersion("2.4.1"):/g' /home/ubuntu/.local/lib/python3.8/site-packages/snakemake/deployment/singularity.py
+
+# Fixing error in snakemake deployement, comparaison between int and str :
+SNAK_DEPLOY_PATH=$(sudo find / snakemake | grep snakemake/deployment/singularity.py)
+for file in $SNAK_DEPLOY_PATH;
+do
+    sed -i 's/if not LooseVersion(v)) >= LooseVersion("2.4.1"):/if not str(LooseVersion(v)) >= str(LooseVersion("2.4.1")):/g' $file
+done
+
+
 
 #------------------------#
 #   3. Generate images   #
