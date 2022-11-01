@@ -30,7 +30,7 @@ fi
 
 # 0.2 Update & upgrade & autoremove & autoclean
 echo -e -n "\n$CYAN Updating ... $EOC" | sort
-# sudo apt update -y &> /dev/null && sudo apt full-upgrade -y &> /dev/null && sudo apt autoremove -y &> /dev/null && sudo apt autoclean -y &> /dev/null
+sudo apt update -y &> /dev/null && sudo apt full-upgrade -y &> /dev/null && sudo apt autoremove -y &> /dev/null && sudo apt autoclean -y &> /dev/null
 echo -e "$GREEN  Done $EOC"
 
 #---------------------------------#
@@ -122,7 +122,7 @@ echo -e -n "\n$CYAN 4. Executing Workflow $EOC" | sort
 if which snakemake &>/dev/null ;
 then
     cd ./Workflow
-  #  snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
+    snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
 else
     echo -e -n "$RED Error Snakemake not find" | sort
     exit 1
