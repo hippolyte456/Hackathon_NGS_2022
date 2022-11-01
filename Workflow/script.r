@@ -213,3 +213,26 @@ write.table(res_mat, "DESeq_results.txt", sep="\t")  # output file (table format
 pdf("plot_counts.pdf")
 plotCounts(dds, gene=which.min(res$padj), intgroup="condition")  # output file (pdf) showing the most variable gene bewteen the 2 groups (wild and mutated)
 dev.off()
+
+
+DEgenes = which(res$padj<0.05)      # row numbers whose genes are significantly differentially expressed
+significative_DEgenes = res[DEgenes,]   # matrix containing names, log2FC and adjusted p-value of significantly differentially expressed genes
+significative_DEgenes = significative_DEgenes[, c(2,6)]
+write.table(significative_DEgenes, "Significative_DEgenes.txt", sep="\t")   # output file (matrix format txt) of previous matrix 
+
+
+summary.df = as.data.frame(matrix("", ncol= 3, nrow = 3))  # DataFrame whose summarise previous matrix
+rownames(summary.df) = c("significantly differentially expressed ", "overexpressed genes in mutants", "overexpressed genes in wild types")
+colnames(summary.df) = c("Amount", "Ratio (significantly differentially expressed)", "Ratio (all expressed genes)")
+
+summary.df[1,1] = dim(significative_DEgenes)[1]
+summary.df[2,1] = length(which(significative_DEgenes$log2FoldChange < -1))
+summary.df[3,1] = length(which(significative_DEgenes$log2FoldChange > 1))
+
+summary.df[1,2] = round(as.numeric(summary.df[1,1]) / as.numeric(summary.df[1,1]), digits = 2)
+summary.df[2,2] = round(as.numeric(summary.df[2,1]) / as.numeric(summary.df[1,1]), digits = 2)
+summary.df[3,2] = round(as.numeric(summary.df[3,1]) / as.numeric(summary.df[1,1]), digits = 2)
+
+summary.df[1,3] = round(as.numeric(summary.df[1,1]) / dim(counts)[1], digits = 2)
+summary.df[2,3] = round(as.numeric(summary.df[2,1]) / dim(counts)[1], digits = 2)
+summary.df[3,3] = round(as.numeric(summary.df[3,1]) / dim(counts)[1], digits = 2)

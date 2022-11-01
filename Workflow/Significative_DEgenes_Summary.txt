@@ -1,0 +1,4 @@
+"Amount"	"Ratio (significantly differentially expressed)"	"Ratio (all expressed genes)"
+"significantly differentially expressed "	"1459"	"1"	""
+"overexpressed genes in mutants"	"42"	"0.03"	""
+"overexpressed genes in wild types"	"1394"	"0.96"	""
