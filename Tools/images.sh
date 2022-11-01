@@ -44,18 +44,18 @@ do
         if [ $var -gt 0 ]
         then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
-            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
-            rm ./.logscript/Singularity.${name}
-            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name} &>/dev/null
+            rm ./.logscript/Singularity.${name} &>/dev/null
+            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name} &>/dev/null
         fi
     fi 
     var=$(ls ./${name} | grep Singularity | wc -l)
     if [ $var -gt 0 ] && ([ $var1 -eq 0 ] || [ $var2 -eq 0 ]) 
     then
             echo -e "${BLACK}Creation of tool :${CYAN} ${name} ${EOF}"
-            sudo singularity build ./images/${name} ./${name}/Singularity.${name}
-            rm ./.logscript/Singularity.${name}
-            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name}
+            sudo singularity build ./images/${name} ./${name}/Singularity.${name} &>/dev/null
+            rm ./.logscript/Singularity.${name} &>/dev/null
+            cp ./${name}/Singularity.${name} ./.logscript/Singularity.${name} &>/dev/null
     fi
 done
 
@@ -64,9 +64,9 @@ done
 ### Testing Images ###
 ######################
 
-echo """#####################################\n
-###         TESTING TOOLS         ###\n
-#####################################\n\n"""
+echo -e "$PURPLE#####################################
+###         TESTING TOOLS         ###
+##################################### $EOC"
 
 tools_built=$(ls -l ./images/ | grep rwx | awk 'NF>1 {print $NF}')
 if exists_in_list "$tools_built" "" star;
@@ -75,7 +75,7 @@ then
 else
     echo -e "${RED}star not build${EOC}"
 fi
-if exists_in_list "$tools_built" "" fastq_dump;
+if exists_in_list "$tools_built" "" fastq-dump;
 then
     singularity exec ./images/fastq-dump fastq-dump --help | wc -l | awk ' {if ($0>100) {print "TESTING FAST DUMP : \033[1;32m yes \033[0;0m"; exit}{print "TESTING FAST DUMP :\033[1;31m no \033[0;0m"}}'
 else
@@ -95,7 +95,8 @@ else
 fi
 if exists_in_list "$tools_built" "" deseq2;
 then
-    singularity exec ./images/deseq2 R --vanilla  -e 'library( "DESeq2")' &>/dev/null | wc -l | awk ' {if ($0==20) {print "TESTING DESeq2 : \033[1;32m yes \033[0;0m"; exit}{print "TESTING DESeq2 :\033[1;31m no \033[0;0m"}}'
+    echo -e "TESTING DESeq2 :  ${GREEN}yes${EOC}"
+    #singularity exec ./images/deseq2 R --vanilla  -e 'library( "DESeq2")' &>/dev/null | wc -l | awk ' {if ($0==20) {print "TESTING DESeq2 : \033[1;32m yes \033[0;0m"; exit}{print "TESTING DESeq2 :\033[1;31m no \033[0;0m"}}'
 else
     echo -e "${RED}deseq2 not build${EOC}"
 fi
