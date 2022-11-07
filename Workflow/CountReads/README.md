@@ -55,3 +55,9 @@ file ‘CountReads_counts.tsv’ has magic number '# Pro'
 
 Maybe the exploitation is soft locked somewhere ... 
 Tsv files are normaly correctly exploited by R.
+
+# WELL IT'S NOT SOFTLOCKED
+
+``` R
+> data <- read.table("C:/Users/joseph/Dropbox/Joseph/AgroParisTech/IODAAAAA/IODAA NOTES/AMI2B/Hackathon/Hack_Gene_Diff/CountReads.counts", header = TRUE, row.names = "Geneid")
+```
