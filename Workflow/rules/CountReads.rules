@@ -1,7 +1,7 @@
 rule CountReads :
     input :
         gtf = __gtf_CR,
-        bam = __mapping_CR
+        bam = __input_CR_counts
 
     params :
        CR_Repertory = __repertory_CR,

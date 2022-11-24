@@ -1,19 +1,24 @@
+__threads_GF = config["GetFastq"]["threads"]
+
 rule getFastq :
     params :
-       ncbi_id =  __ncbi_id,
+       id =  __params_GF_NCBI_id,
        GF_Repertory = __repertory_GF
 
     output :
-        output_GF = __output_GF
+        output_GF_1 = __output_GF_1,
+        output_GF_2 = __output_GF_2
 
     message :
-        "GetFastq with sra toolkit for {params.ncbi_id} SRAID"
+        "GetFastq with sra toolkit for {params.id} SRAID"
 
     singularity :
         __container_GF  
  
+    threads :
+        __threads_GF
+
     shell :
-        " vdb-config --restore-defaults;\
-        for ncbi_id in {params.ncbi_id}; do \
-            prefetch -f yes $ncbi_id -O {params.GF_Repertory} ;\
-        done"
+        "vdb-config --restore-defaults ;\
+        prefetch -f yes {params.id} -O {params.GF_Repertory};\
+        fasterq-dump --split-files {params.GF_Repertory}/{params.id}/{params.id}.sra -O {params.GF_Repertory}/{params.id}"

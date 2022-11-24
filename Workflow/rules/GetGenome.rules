@@ -1,20 +1,21 @@
+__threads_GG = config["GetGenome"]["threads"]
+
 rule GetGenome :
     params :
-       chr =  __chr_GG,
-       GG_Repertory = __repertory_GG
+        chr = __params_GG_Chromosom,
+        GG_Repertory = __repertory_GG
 
     output :
-        output_GG = __output_GG_fa_gz,
-        output_GG_ref = __output_GG_ref
+        genome = __output_GG_Genome
 
     message :
         "GetGenome with sra toolkit for {params.chr} NCBI_id"
 
     singularity :
-        __container_GG  
+        __container_GG
+
+    threads :
+        __threads_GG
  
     shell :
-        "for chr in {params.chr}; do  \
-            wget -O {params.GG_Repertory}$chr.fa.gz https://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.$chr.fa.gz ; \
-        done ;\
-        gunzip -c {params.GG_Repertory}*.fa.gz > {params.GG_Repertory}ref.fa"
+        "wget -O {params.GG_Repertory}{params.chr}.fa.gz https://ftp.ensembl.org/pub/release-108/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.{params.chr}.fa.gz &> /dev/null"

@@ -1,9 +1,13 @@
+__threads_IG = config["IndexGenome"]["threads"]
+
 rule IndexGenome :
     input :
-        genome = __input_IF
+        genome = __input_IG_Genome,
+        gtf = __input_IG_annot
 
     params :
-       IG_Repertory = __repertory_IG
+        IG_Repertory = __repertory_IG,
+        GG_Repertory = __repertory_GG
 
     output :
         ChrL =__output_CI_ChrL,
@@ -19,11 +23,17 @@ rule IndexGenome :
         "Creating index from {input.genome}"
 
     singularity :
-        __container_IG  
+        __container_IG
+
+    threads :
+        __threads_IG
  
     shell :
-        "CPU=$(grep -c ^processor /proc/cpuinfo) ;\
-        STAR --runThreadN $CPU \
+        "gunzip -c {params.GG_Repertory}*.fa.gz > {params.GG_Repertory}ref.fa ;\
+        STAR --runThreadN 8 \
              --runMode genomeGenerate \
              --genomeDir {params.IG_Repertory}    \
-             --genomeFastaFiles {input.genome}"
+             --genomeFastaFiles  {params.GG_Repertory}ref.fa \
+             --sjdbGTFfile {input.gtf} \
+             --sjdbOverhang 100 \
+             --genomeSAindexNbases 11"

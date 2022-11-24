@@ -1,57 +1,41 @@
 Chromosom : 
-  - "1"
-  - "2"
-  - "3"
-  - "4"
-  - "5"
-  - "6"
-  - "7"
-  - "8"
-  - "9"
-  - "10"
-  - "11"
-  - "12"
-  - "13"
-  - "14"
-  - "15"
-  - "16"
-  - "17"
-  - "18"
-  - "19"
+  #- "1"
+  #- "2"
+  #- "3"
+  #- "4"
+  #- "5"
+  #- "6"
+  #- "7"
+  #- "8"
+  #- "9"
+  #- "10"
+  #- "11"
+  #- "12"
+  #- "13"
+  #- "14"
+  #- "15"
+  #- "16"
+  #- "17"
+  #- "18"
+  #- "19"
   - "20"
-  - "21"
-  - "22"
-  - "MT"
-  - "X"
-  - "Y"
+  #- "21"
+  #- "22"
+  #- "MT"
+  #- "X"
+  #- "Y"
 
 NCBI_id :
-  - "SRR636533"
-  - "SRR636531"
-  - "SRR636532"
-  - "SRR628589"
-  - "SRR628588"
-  - "SRR628587"
-  - "SRR628586"
-  - "SRR628585"
-  - "SRR628584"
-  - "SRR628583"
-  - "SRR628582"
+  - SRR628589
+  - SRR628588
+  #- SRR628587
+  #- SRR628586
+  #- SRR628585
+  #- SRR628584
+  #- SRR628583
+  #- SRR628582
   
 Individual_conditions :
-  SRR628586 : WT
-# SRR636533 : WT
-# SRR636531 : WT
-# SRR636532 : WT
-# SRR628589 : WT
-# SRR628588 : WT
-# SRR628587 : WT
-# SRR628586 : WT
-# SRR628585 : WT
-# SRR628584 : WT
-# SRR628583 : WT
-# SRR628582 : WT
-
 #  SRR628582 : SF3B1 
 #  SRR628583 : SF3B1
 #  SRR628584 : SF3B1
@@ -64,10 +48,14 @@ Individual_conditions :
 GetFastq :
   Repertory : fastq-dump/
   container : images/fastq-dump
+  Extension : .sra
+  threads : 8 # Number of SRAIDS, if it is higher than the number of cores available on your computer it will be scaled down automatically
 
 GetGenome :
   Repertory : Genome/
+  Extension : .fa.gz
   container : images/fastq-dump
+  threads : 25 # Number of chr to download, if it is higher than the number of cores available on your computer it will be scaled down automatically
 
 GetAnnot :
   Repertory : GenomeAnnot/
@@ -75,14 +63,18 @@ GetAnnot :
   Filename : genome_annot
   container : images/fastq-dump
   genome_ref : GRCh38
+  threads : 8
 
 IndexGenome:
   Repertory : IndexGenome/
   container : images/star
+  threads : 25
 
 MappingSTAR :
   Repertory : MappingSTAR/
   container : images/star
+  Extension : .bam
+  threads : 8
 
 CountReads :
   Repertory : CountReads/
