@@ -1,0 +1,15 @@
+Status	MappingSTAR/SRR628589.bam	MappingSTAR/SRR628588.bam	MappingSTAR/SRR628587.bam	MappingSTAR/SRR628586.bam	MappingSTAR/SRR628585.bam	MappingSTAR/SRR628584.bam	MappingSTAR/SRR628583.bam	MappingSTAR/SRR628582.bam
+Assigned	24112664	18168787	21742625	15374490	18368602	15503440	21633922	19788426
+Unassigned_Unmapped	0	0	0	0	0	0	0	0
+Unassigned_Read_Type	0	0	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0	0
+Unassigned_MultiMapping	7557156	7283850	18664268	4061642	16884332	3037598	20648970	5006374
+Unassigned_Secondary	0	0	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0	0	0
+Unassigned_NoFeatures	321891	314354	184569	223780	281604	224571	731507	416403
+Unassigned_Overlapping_Length	0	0	0	0	0	0	0	0
+Unassigned_Ambiguity	7609895	4636575	5922046	3760188	4484260	3737143	5365613	5746705

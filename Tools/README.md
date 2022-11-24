@@ -27,7 +27,7 @@
 
 ### Install Singularity
 
-For Ubuntu :
+For Ubuntu (from the Repo directory) :
 
 ```bash
 sudo apt-get update
@@ -63,6 +63,9 @@ sudo make install
 ```
 
 ### Generate images
+
+For Ubuntu (from the Tools directory) :
+
 ```bash
 ./images.sh
 ```

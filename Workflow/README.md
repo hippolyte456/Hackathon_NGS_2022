@@ -28,11 +28,17 @@ conda activate snakemake
 pip install snakemake
 ```
 
+### Using Bash (worked for me ...)
+```bash
+sudo apt install snakemake
+```
+
 ### Check Installation
 ```bash
 singularity --version
 snakemake -v  
 ```
+
 ## Prepare Images
 from the source of the git directory run
 ```bash
@@ -43,6 +49,7 @@ cp -r Tools/images Worflow/images
 
 # Execution
 Once the 'environment setup' is done :
+From the Workflow directory :
 ```bash
 snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
 ```
@@ -63,3 +70,5 @@ snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configur
  * Improve README files (Work in progress)
  * Once everything is good we will be able to move on DESeq2 script
  * Try with lower VM capacity
+ * See what's up with R when generating the images (seems like downloading way too much packages) ...
+ * Implement FastQC (beginning of the workflow = multithreading ?)
