@@ -128,7 +128,7 @@ echo -e -n "\n$CYAN 4. Executing Workflow $EOC" | sort
 if which snakemake &>/dev/null ;
 then
     cd ./Workflow
-    snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
+    snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 36 -k --printshellcmds
 else
     echo -e -n "$RED Error Snakemake not find" | sort
     exit 1

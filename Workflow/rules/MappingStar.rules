@@ -25,9 +25,7 @@ rule MappingSTAR :
         __threads_MS
  
     shell :
-        " echo {input.index} ;\
-        CPU=$(grep -c ^processor /proc/cpuinfo) ;\
-         STAR --outSAMstrandField intronMotif \
+        "STAR --outSAMstrandField intronMotif \
                 --outFilterMismatchNmax 4 \
                 --outFilterMultimapNmax 10 \
                 --genomeDir {params.IG_Repertory} \
@@ -37,5 +35,6 @@ rule MappingSTAR :
                 --outSAMtype BAM SortedByCoordinate \
                 --outStd BAM_SortedByCoordinate \
                 --genomeLoad NoSharedMemory \
+		--limitBAMsortRAM 3000000000 \
             >  {params.MS_Repertory}{params.ncbi_id}.bam"
 

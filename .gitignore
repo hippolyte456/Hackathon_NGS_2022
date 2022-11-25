@@ -6,7 +6,6 @@ Workflow/.ncbi/
 Workflow/.snakemake/
 Workflow/Genome/
 Workflow/GenomeAnnot/
-Workflow/IndexGenome/
 Workflow/Log.out
 Workflow/Log.progress.out
 Workflow/Log.std.out
@@ -17,3 +16,6 @@ Workflow/images/
 Workflow/sample.tsv
 configuration.yml
 sample.tsv
+Tools/.logscript/
+Tools/images/
+Workflow/IndexGenome/
