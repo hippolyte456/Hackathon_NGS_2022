@@ -68,7 +68,7 @@ GetAnnot :
 IndexGenome:
   Repertory : IndexGenome/
   container : images/star
-  threads : 25
+  threads : 1
 
 MappingSTAR :
   Repertory : MappingSTAR/
@@ -81,3 +81,4 @@ CountReads :
   Extension : .counts
   Filename :  CountReads
   container : images/subread
+  threads : 1

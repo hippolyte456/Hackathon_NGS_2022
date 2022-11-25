@@ -35,6 +35,7 @@ rule MappingSTAR :
                 --outSAMtype BAM SortedByCoordinate \
                 --outStd BAM_SortedByCoordinate \
                 --genomeLoad NoSharedMemory \
-		--limitBAMsortRAM 3000000000 \
+		        --limitBAMsortRAM 3000000000 \
+                --outTmpDir {params.FQ_Repertory}{params.ncbi_id}/__tmpSTAR \
             >  {params.MS_Repertory}{params.ncbi_id}.bam"
 
