@@ -40,3 +40,6 @@ It's a bit much, but at least it works. We will try to reduce the need for capac
 ```bash
 ./run.sh
 ```
+
+The report of our work is available here 
+
