@@ -1,0 +1,293 @@
+---
+title: "PROJET HACKATHON : Script R, Deseq2"
+output: html_document
+date: "2022-12-08"
+---
+
+## Présentation des données
+
+Les données sont les sorties du Count.Reads. En ligne on a les gènes du genome humain et en ligne on a les échantillons de personnes ayant des mutations du gène SF3B1 en lien avec le cancer uveal melanoma.
+
+CountReads compte le nombre de fois ou les sequences de chaque gene sont exprimées pour les differents patients ?
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+rm(list = ls())
+```
+
+```{r library, include=FALSE}
+# Quelques packages nécessaires pour ce projet
+library(DESeq2)
+library(factoextra)
+library(FactoMineR)
+library(ggplot2)
+```
+
+### 1. Importer le jeu de données `CountReads`
+
+#### 1a. Importation des données de `CountReads`. Dimensions de ce jeu de données et affichage des données.
+
+Importation des données :
+
+```{r Importation des données}
+
+CountReads <- read.delim("~/INGE 3A/AMI2B_Hackathon/CountReads.counts", comment.char="#")
+#CountReads <- read.delim("~/Hackathon_NGS_2022/Workflow/CountReads/CountReads.counts", comment.char="#")
+colData <- read.delim("~/INGE 3A/AMI2B_Hackathon/TryR.txt", comment.char="#")
+#colData <- read.delim("~/Hackathon_NGS_2022/Workflow/TryR.txt", comment.char="#")
+View(CountReads)
+View(colData)
+```
+
+Dimension du jeu de données :
+
+```{r dimension du jeu de données}
+
+dim(CountReads)
+dim(colData)
+```
+
+Tables de données :
+
+```{r affichage des données}
+knitr::kable(head(CountReads))
+knitr::kable(head(colData,8))
+```
+
+#### 1b. Pré-traitement du jeu de données et vérifications nécessaires
+
+```{r Verification des donnees}
+
+countData <- CountReads[,7:14]
+rownames(countData) <- CountReads[,1]
+all(colnames(countData) %in% rownames(colData)) #meme colonnes ?
+all(colnames(countData) == rownames(colData)) #meme ordre ?
+```
+
+#### 1c. Première visualisation des données
+
+Faire PCA sur le sample de données SRR
+
+### 2. DESeq
+
+#### 2a.Construct a DESeqDataSet Object
+
+```{r DeseqDataSet object}
+
+dds <- DESeqDataSetFromMatrix(countData = countData, 
+                       colData = colData,
+                       design = ~ Type)
+
+dds
+```
+
+#### 2b. Mise en forme du DESeqDataSet
+
+Optional pre-filtering :
+
+```{r Deseq Pre-filtering}
+
+#pre-filtering: removing rows with low gene counts
+#keeping rows that have at least 10 reads total
+#Peut etre le mettre a 0
+
+keep <- rowSums(counts(dds)) >= 10
+dds <- dds[keep,]
+
+dds
+```
+
+Set a factor level :
+
+```{r Deseq ref}
+
+dds$Type <- relevel(dds$Type, ref = "WT") #Set "WT" as a reference level
+```
+
+#### 2c. Run DESeq2
+
+Run DESeq :
+
+```{r DESeq}
+
+dds <- DESeq(dds)
+```
+
+Explore Results :
+
+```{r Results}
+
+resultsNames(dds)
+```
+
+Choisir le niveau de significativité voulu :
+
+```{r pvalue}
+
+#res <- results(dds) #alpha = 0.1
+#res0.05 <- results(dds, alpha=0.05)
+#res0.01 <- results(dds, alpha = 0.01)
+#summary(res0.05)
+#summary(res0.01)
+
+ALPHA = 0.01
+res <- results(dds, alpha = ALPHA)
+summary(res)
+```
+
+Trier les résultats par ordre de significativité :
+
+```{r Ordonner}
+
+res <- res[order(res$padj),]
+knitr::kable(head(res))
+mcols(res)$description
+```
+
+Liste des gènes différentiels (padj inferieure à ALPHA) :
+
+```{r padj inf a alpha}
+#keep <- which(!is.na(res$padj))
+#resWna <- res[keep,] #Drop NAs from padj column
+
+#keep <- which(resWna$padj < ALPHA)
+#low_value_res <- resWna[keep,]
+
+#s_genes <-rownames(low_value_res) #significant genes
+#s_genes"""
+
+diff_genes <- subset(res, padj < ALPHA)
+d_genes <- rownames(diff_genes)
+d_genes
+length(d_genes)
+```
+
+```{r Gene Article}
+
+ADAM12 = "ENSG00000148848"
+GNA11 =	"ENSG00000088256"
+UQCC1	= "ENSG00000101019"
+ABCC5	= "ENSG00000114770"
+SF3B1	= "ENSG00000115524"
+GNAQ = "ENSG00000156052"
+BAP1 = "ENSG00000163930"
+CRNDE = "ENSG00000245694"
+
+gene_interet <- c(ADAM12, GNA11, UQCC1, ABCC5, SF3B1, GNAQ, BAP1, CRNDE)
+gene_article <- c("ADAM12", "GNA11", "UQCC1", "ABCC5", "SF3B1", "GNAQ", "BAP1", "CRNDE")
+
+keep <- which(rownames(res) %in% gene_interet)
+res_Article <- res[keep,]
+```
+
+### 3. Plots et Analyses
+
+#### 3a. Plotcounts
+
+```{r plotCounts}
+
+#we can use plotCounts functiun to compare the normalized counts
+#between mutated SF3B1 and WT groups (for our top genes)
+#ceiling(length(s_genes)/5
+
+par(mfrow=c(2,3))
+
+for (g in d_genes) {
+  plotCounts(dds, gene=g, intgroup="Type")
+}
+
+```
+
+```{r ARTICLE plotCounts}
+
+
+par(mfrow=c(2,3))
+
+for (g in gene_interet) {
+  plotCounts(dds, gene=g, intgroup="Type")
+}
+
+```
+
+#### 3b. PlotPCA
+
+```{r PCA}
+trans <- DESeqTransform(dds)
+plotPCA(object = trans, intgroup = "Type")
+
+
+#PCA 
+countData_t <- t(countData)
+pca <- PCA(countData_t)
+
+
+#Normalisation
+norm <- getVarianceStabilizedData(dds)
+norm_t <- t(norm)
+
+pca_norm_t <- PCA(norm_t)
+```
+
+#### 3c. PlotMA
+
+```{r PlotMA}
+
+plotMA(res)
+```
+
+```{r ARTICLE PlotMA}
+
+plotMA(res_Article)
+```
+
+#### 3d. Ggplot
+
+```{r ggplot ExpDiff}
+ggplot(as.data.frame(res), aes(x = baseMean, y = log2FoldChange)) + geom_point() + 
+  ggtitle("Expression différentielle des gènes :") +
+  ylab("log2 Fold Change") + xlab("BaseMean") + geom_text(label=gene_article)
+```
+
+#### 3e. Heatmap
+
+```{r Check no NAs, eval = FALSE}
+
+check_NAs <- function(table){
+  s <- 0
+  col_with_NA <- c()
+  for (X in colnames(table)){
+    S <- sum(is.na(table[X]))
+    if (S != 0){
+      col_with_NA <- paste(col_with_NA, c(X), sep = ",")
+    }
+    s <- s + S}
+Out <- c(s==0, col_with_NA) 
+Out #la fonction retourne le résultat
+}
+```
+
+```{r Drop NAs, eval = FALSE}
+
+if (length(check_NAs(resWna))==2){
+  for (X in check_NAs(resWna)[2]){
+      keep <- which(!is.na(resWna[X]))
+      resWna <- resWna[keep,] #Drop NAs from all columns
+  }
+}
+
+```
+
+```{r heatmap}
+
+#Générer la heatmap
+heatmap(as.matrix(diff_genes[, -1]))
+```
+
+## A faire
+
+-   Mettre tout en anglais ou en Francais mais ds la meme langue (anglais de pref)
+-   Faire en sorte que tout soit reproductible (path des fichiers d'entree, contruction de colData, Verification ou mise en ordre des colonnes de colData, les entrées des plot counts)
+-   Remettre ordre du 3. en fonction de l'analyse tirée de chaque plot
+-   Trouver les noms des genes qui nous interessent
+-   Les colorier sur les graphiques
+-   Est ce qu'on fait le rapport comme ça ? Si oui cacher les codes qui ne sont pas de conclusion.
