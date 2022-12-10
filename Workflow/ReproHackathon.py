@@ -26,7 +26,6 @@ __output_GF_2 = config["GetFastq"]["Repertory"] + "{ncbi_id}/{ncbi_id}" + "_2.fa
 #---------------#
 
 # Conversion des fichiers SRA en fichier FATSQ compressé
-# Unzip chr* and concact chr* in ref.fa
 
 # ~~ parameters depending on inputs
 __params_GG_Chromosom = "{chromosom}"
@@ -84,21 +83,20 @@ __output_CI_SAi= config["IndexGenome"]["Repertory"] + "SAindex"
 
 # Mapping des fichiers FASTQ compressés avec le génome index (alignement des séquences avec le génôme humain) 
 
+
 # ~~ input
 __input_MS_1 = __output_GF_1
 __input_MS_2 = __output_GF_2
 __input_MS_index = __output_CI_SAi 
 __container_MS = "./" + config["MappingSTAR"]["container"]
 __repertory_MS = config["MappingSTAR"]["Repertory"]
+__ncbi_id = lambda wildcard : config["NCBI_id"]
 
 # ~~ parameters depending on inputs
 __params_MS_NCBI_id = "{ncbi_id}"
 
 # ~~ output
 __output_MSTAR_bam = config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + ".bam"
-
-
-# Need to find a way to get the perfect limitBAMsortBam according to the server where it is running
 
 #----------------#
 #   CountReads   #
@@ -125,12 +123,12 @@ __output_CR = config["CountReads"]["Repertory"] + config["CountReads"]["Filename
 #   Include Rules   #
 #####################
 
-include : os.getcwd() + "/rules/GetFastq.rules"
-include : os.getcwd() + "/rules/GetGenome.rules"
-include : os.getcwd() + "/rules/IndexGenome.rules"
-include : os.getcwd() + "/rules/MappingStar.rules"
-include : os.getcwd() + "/rules/GetAnnot.rules"
-include : os.getcwd() + "/rules/CountReads.rules"
+include : os.getcwd() + "/rules/GetFastq.py"
+include : os.getcwd() + "/rules/GetGenome.py"
+include : os.getcwd() + "/rules/IndexGenome.py"
+include : os.getcwd() + "/rules/MappingStar.py"
+include : os.getcwd() + "/rules/GetAnnot.py"
+include : os.getcwd() + "/rules/CountReads.py"
 
 ###################
 #   Rule Target   #
