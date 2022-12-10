@@ -1,6 +1,5 @@
 .ncbi/
 .snakemake/
-rules/
 ReproHackathon.wf
 Workflow/.ncbi/
 Workflow/.snakemake/
