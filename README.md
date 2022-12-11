@@ -24,6 +24,14 @@ To do this, we have designed and implemented a reproductible workflow.<br>
 * A Script "run.sh" to execute the workflow. (TO DO)
 * A [README](./README.md) file
 
+### Images Resumes
+
+![alt text](./Tools/Images_Resume.png)
+
+### Rules Resumes :
+
+![alt text](./Workflow/Rules_Architecture.png)
+
 ## About IFB Cloud
 
 "French Institute of Bioinformatics ([IFB](https://www.france-bioinformatique.fr/cloud-ifb/)) provides life scientists with a federation of clouds, Biosphere, and bioinformatics cloud services to analyze life science data. Biosphere is used for scientific production in the life sciences, developments, and to support events like cloud and scientific training sessions, hackathons or workshops."
