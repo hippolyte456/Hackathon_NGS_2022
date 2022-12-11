@@ -54,6 +54,19 @@ knitr::kable(head(CountReads))
 knitr::kable(head(colData,8))
 ```
 
+```{r PCA, eval = FALSE}
+#PCA 
+countData_t <- t(countData)
+pca <- PCA(countData_t)
+
+
+#Normalisation
+norm <- getVarianceStabilizedData(dds)
+norm_t <- t(norm)
+
+pca_norm_t <- PCA(norm_t)
+```
+
 #### 1b. Pré-traitement du jeu de données et vérifications nécessaires
 
 ```{r Verification des donnees}
@@ -118,6 +131,8 @@ Explore Results :
 ```{r Results}
 
 resultsNames(dds)
+trans <- DESeqTransform(dds)
+plotPCA(object = trans, intgroup = "Type")
 ```
 
 Choisir le niveau de significativité voulu :
@@ -190,9 +205,65 @@ keep <- which(rownames(res) %in% gene_interet)
 res_Article <- res[keep,]
 ```
 
-### 3. Plots et Analyses
+### 3. Plots et Analyses pour les gènes de l'article
 
-#### 3a. Plotcounts
+#### 3a. Plotcounts pour les gènes mentionnées dans l'article
+
+```{r ARTICLE plotCounts}
+
+par(mfrow=c(2,3))
+
+for (g in rownames(res_Article)) {
+  plotCounts(dds, gene=g, intgroup="Type")
+}
+
+```
+
+#### 3b. PlotMA pour les gènes mentionnés dans l'article
+
+```{r ARTICLE PlotMA}
+
+plotMA(res_Article)
+```
+
+#### 3c. Ggplot
+
+```{r ARTICLE ggplot ExpDiff}
+ggplot(as.data.frame(res_Article), aes(x = baseMean, y = log2FoldChange)) + geom_point() + 
+  ggtitle("Expression des gènes de l'article :") +
+  ylab("log2 Fold Change") + xlab("BaseMean") #+ geom_text(label=gene_article)
+```
+
+#### 3d. Heatmap pour les gènes mentionnés dans l'article
+
+```{r ARTICLE heatmap}
+
+#Générer la heatmap
+heatmap(as.matrix(res_Article[, -1]))
+```
+
+#### 3e. VolcanoPlot pour les gènes mentionnés dans l'article
+
+```{r ARTICLE Volcano Plot}
+
+alpha <- ALPHA # Threshold on the adjusted p-value
+cols <- densCols(res_Article$log2FoldChange, -log10(res_Article$pvalue))
+plot(res_Article$log2FoldChange, -log10(res_Article$padj), col=cols, panel.first=grid(),
+     main="Volcano plot", xlab="Effect size: log2(fold-change)", ylab="-log10(adjusted p-value)")
+abline(v=0)
+abline(v=c(-1,1), col="brown")
+abline(h=-log10(alpha), col="brown")
+
+text(res_Article$log2FoldChange,
+     -log10(res_Article$padj),
+     lab=rownames(res_Article), cex=0.4)
+```
+
+Conclusion : on ne trouve pas les mêmes résultats que dans l'article quels gèenes on trouve nous ? et quels sont-ils ?
+
+### 4. Plots et Analyses pour les gènes d'expression différentielle
+
+#### 4a. Plotcounts pour les gènes d'expression différentielle
 
 ```{r plotCounts}
 
@@ -208,48 +279,14 @@ for (g in d_genes) {
 
 ```
 
-```{r ARTICLE plotCounts}
-
-par(mfrow=c(2,3))
-
-for (g in rownames(res_Article)) {
-  plotCounts(dds, gene=g, intgroup="Type")
-}
-
-```
-
-#### 3b. PlotPCA
-
-```{r PCA}
-trans <- DESeqTransform(dds)
-plotPCA(object = trans, intgroup = "Type")
-
-
-#PCA 
-countData_t <- t(countData)
-pca <- PCA(countData_t)
-
-
-#Normalisation
-norm <- getVarianceStabilizedData(dds)
-norm_t <- t(norm)
-
-pca_norm_t <- PCA(norm_t)
-```
-
-#### 3c. PlotMA
+#### 4c. PlotMA pour les gènes d'expression différentielle
 
 ```{r PlotMA}
 
 plotMA(res)
 ```
 
-```{r ARTICLE PlotMA}
-
-plotMA(res_Article)
-```
-
-#### 3d. Ggplot
+#### 4d. Ggplot pour les gènes d'expression différentielle
 
 ```{r ggplot ExpDiff}
 ggplot(as.data.frame(res), aes(x = baseMean, y = log2FoldChange)) + geom_point() + 
@@ -257,7 +294,7 @@ ggplot(as.data.frame(res), aes(x = baseMean, y = log2FoldChange)) + geom_point()
   ylab("log2 Fold Change") + xlab("BaseMean") #+ geom_text(label=gene_article)
 ```
 
-#### 3e. Heatmap
+#### 4e. Heatmap pour les gènes d'expression différentielle
 
 ```{r Check no NAs, eval = FALSE}
 
@@ -292,7 +329,7 @@ if (length(check_NAs(resWna))==2){
 heatmap(as.matrix(diff_genes[, -1]))
 ```
 
-#### 3f. VolcanoPlot
+#### 4f. VolcanoPlot pour les gènes d'expression différentielle
 
 ```{r VolcanoPlot}
 
@@ -310,21 +347,6 @@ gn.selected <- abs(res$log2FoldChange) > 2.5 & res$padj < alpha
 text(res$log2FoldChange[gn.selected],
      -log10(res$padj)[gn.selected],
      lab=rownames(res)[gn.selected ], cex=0.4)
-```
-
-```{r ARTICLE Volcano Plot}
-
-alpha <- ALPHA # Threshold on the adjusted p-value
-cols <- densCols(res_Article$log2FoldChange, -log10(res_Article$pvalue))
-plot(res_Article$log2FoldChange, -log10(res_Article$padj), col=cols, panel.first=grid(),
-     main="Volcano plot", xlab="Effect size: log2(fold-change)", ylab="-log10(adjusted p-value)")
-abline(v=0)
-abline(v=c(-1,1), col="brown")
-abline(h=-log10(alpha), col="brown")
-
-text(res_Article$log2FoldChange,
-     -log10(res_Article$padj),
-     lab=rownames(res_Article), cex=0.4)
 ```
 
 ## A faire
