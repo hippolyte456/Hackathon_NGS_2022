@@ -173,8 +173,18 @@ GNAQ = "ENSG00000156052"
 BAP1 = "ENSG00000163930"
 CRNDE = "ENSG00000245694"
 
-gene_interet <- c(ADAM12, GNA11, UQCC1, ABCC5, SF3B1, GNAQ, BAP1, CRNDE)
-gene_article <- c("ADAM12", "GNA11", "UQCC1", "ABCC5", "SF3B1", "GNAQ", "BAP1", "CRNDE")
+GUSBP11 = "ENSG00000228315"
+ANKHD1 = "ENSG00000131503"
+F8 = "ENSG00000185010"
+GAS8 = "ENSG00000141013"
+
+SLC23A2 = "ENSG00000089057"
+FOXP1 = "ENSG00000114861"
+
+
+gene_interet <- c(ADAM12, GNA11, UQCC1, ABCC5, SF3B1, GNAQ, BAP1, CRNDE, GUSBP11, ANKHD1, F8, GAS8, SLC23A2, FOXP1)
+gene_article <- c("ADAM12", "GNA11", "UQCC1", "ABCC5", "SF3B1", "GNAQ", "BAP1", "CRNDE", "GUSBP11", "ANKHD1", "F8", "GAS8", "SLC23A2", "FOXP1")
+
 
 keep <- which(rownames(res) %in% gene_interet)
 res_Article <- res[keep,]
@@ -200,10 +210,9 @@ for (g in d_genes) {
 
 ```{r ARTICLE plotCounts}
 
-
 par(mfrow=c(2,3))
 
-for (g in gene_interet) {
+for (g in rownames(res_Article)) {
   plotCounts(dds, gene=g, intgroup="Type")
 }
 
@@ -245,7 +254,7 @@ plotMA(res_Article)
 ```{r ggplot ExpDiff}
 ggplot(as.data.frame(res), aes(x = baseMean, y = log2FoldChange)) + geom_point() + 
   ggtitle("Expression différentielle des gènes :") +
-  ylab("log2 Fold Change") + xlab("BaseMean") + geom_text(label=gene_article)
+  ylab("log2 Fold Change") + xlab("BaseMean") #+ geom_text(label=gene_article)
 ```
 
 #### 3e. Heatmap
@@ -281,6 +290,41 @@ if (length(check_NAs(resWna))==2){
 
 #Générer la heatmap
 heatmap(as.matrix(diff_genes[, -1]))
+```
+
+#### 3f. VolcanoPlot
+
+```{r VolcanoPlot}
+
+alpha <- ALPHA # Threshold on the adjusted p-value
+
+cols <- densCols(res$log2FoldChange, -log10(res$pvalue))
+plot(res$log2FoldChange, -log10(res$padj), col=cols, panel.first=grid(),
+     main="Volcano plot", xlab="Effect size: log2(fold-change)", ylab="-log10(adjusted p-value)",
+     pch=20, cex=0.6)
+abline(v=0)
+abline(v=c(-1,1), col="brown")
+abline(h=-log10(alpha), col="brown")
+
+gn.selected <- abs(res$log2FoldChange) > 2.5 & res$padj < alpha 
+text(res$log2FoldChange[gn.selected],
+     -log10(res$padj)[gn.selected],
+     lab=rownames(res)[gn.selected ], cex=0.4)
+```
+
+```{r ARTICLE Volcano Plot}
+
+alpha <- ALPHA # Threshold on the adjusted p-value
+cols <- densCols(res_Article$log2FoldChange, -log10(res_Article$pvalue))
+plot(res_Article$log2FoldChange, -log10(res_Article$padj), col=cols, panel.first=grid(),
+     main="Volcano plot", xlab="Effect size: log2(fold-change)", ylab="-log10(adjusted p-value)")
+abline(v=0)
+abline(v=c(-1,1), col="brown")
+abline(h=-log10(alpha), col="brown")
+
+text(res_Article$log2FoldChange,
+     -log10(res_Article$padj),
+     lab=rownames(res_Article), cex=0.4)
 ```
 
 ## A faire
