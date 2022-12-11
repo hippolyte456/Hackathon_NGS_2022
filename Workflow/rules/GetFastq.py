@@ -21,4 +21,4 @@ rule getFastq :
     shell :
         "vdb-config --restore-defaults ;\
         prefetch -f yes {params.id} -O {params.GF_Repertory};\
-        fasterq-dump --split-files {params.GF_Repertory}/{params.id}/{params.id}.sra -O {params.GF_Repertory}/{params.id}"
+        fasterq-dump --split-files {params.GF_Repertory}{params.id}/{params.id}.sra -O {params.GF_Repertory}{params.id}"

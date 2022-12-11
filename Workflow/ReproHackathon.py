@@ -157,8 +157,8 @@ __container_DES = "./" + config["Deseq"]["container"]
 __repertory_DES = config["Deseq"]["Repertory"]
 
 # ~~ output
-__output_fake =  config["Deseq"]["Repertory"] + "fake" + config["Deseq"]["Extension"]
-
+__output_PCA =  config["Deseq"]["Repertory"] + "pca" + config["Deseq"]["Extension"]
+__output_PlotMA =  config["Deseq"]["Repertory"] + "plotMA_res" + config["Deseq"]["Extension"]
 
 #####################
 #   Include Rules   #
@@ -179,7 +179,8 @@ include : os.getcwd() + "/rules/Deseq.py"
 
 rule targets :
     input :
-        __output_CR
+        __output_PCA,
+        __output_PlotMA
 
     message :
         "All the workflow is done !!"

@@ -91,6 +91,6 @@ CountReads :
 
 Deseq :
   Repertory : Deseq/
-  Extension : .R
+  Extension : .png
   container : images/deseq2
   threads : 1
