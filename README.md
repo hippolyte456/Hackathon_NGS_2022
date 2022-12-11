@@ -30,7 +30,7 @@ To do this, we have designed and implemented a reproductible workflow.<br>
 
 ### Rules Resumes :
 
-![alt text](./Workflow/Rules_Architecture.png)
+![alt text](./Workflow/rules_architecture.png)
 
 ## About IFB Cloud
 

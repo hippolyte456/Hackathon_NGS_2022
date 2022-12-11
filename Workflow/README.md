@@ -10,7 +10,7 @@
 * A [README](./README.md) file
 
 ## Resume
-![alt text](./Rules_Architecture.png)
+![alt text](./rules_architecture.png)
 
 ## Setup
 
