@@ -54,6 +54,18 @@ knitr::kable(head(CountReads))
 knitr::kable(head(colData,8))
 ```
 
+#### 1b. Pré-traitement du jeu de données et vérifications nécessaires
+
+```{r Verification des donnees}
+
+countData <- CountReads[,7:14]
+rownames(countData) <- CountReads[,1]
+all(colnames(countData) %in% rownames(colData)) #meme colonnes ?
+all(colnames(countData) == rownames(colData)) #meme ordre ?
+```
+
+#### 1c. Première visualisation des données
+
 ```{r PCA, eval = FALSE}
 #PCA 
 countData_t <- t(countData)
@@ -67,23 +79,9 @@ norm_t <- t(norm)
 pca_norm_t <- PCA(norm_t)
 ```
 
-#### 1b. Pré-traitement du jeu de données et vérifications nécessaires
-
-```{r Verification des donnees}
-
-countData <- CountReads[,7:14]
-rownames(countData) <- CountReads[,1]
-all(colnames(countData) %in% rownames(colData)) #meme colonnes ?
-all(colnames(countData) == rownames(colData)) #meme ordre ?
-```
-
-#### 1c. Première visualisation des données
-
-Faire PCA sur le sample de données SRR
-
 ### 2. DESeq
 
-#### 2a.Construct a DESeqDataSet Object
+#### 2a.Construct a `DESeqDataSet Object`
 
 ```{r DeseqDataSet object}
 
@@ -94,7 +92,7 @@ dds <- DESeqDataSetFromMatrix(countData = countData,
 dds
 ```
 
-#### 2b. Mise en forme du DESeqDataSet
+#### 2b. Mise en forme du `DESeqDataSet`
 
 Optional pre-filtering :
 
@@ -117,9 +115,9 @@ Set a factor level :
 dds$Type <- relevel(dds$Type, ref = "WT") #Set "WT" as a reference level
 ```
 
-#### 2c. Run DESeq2
+#### 2c. Run `DESeq2`
 
-Run DESeq :
+Run `DESeq` :
 
 ```{r DESeq}
 
@@ -159,7 +157,42 @@ knitr::kable(head(res))
 mcols(res)$description
 ```
 
-Liste des gènes différentiels (padj inferieure à ALPHA) :
+Liste des gènes cités dans l'article :
+
+```{r Gene Article}
+
+Article = data.frame("ENSG00000148848" = "ADAM12",
+                "ENSG00000088256" = "GNA11",
+                "ENSG00000101019" = "UQCC1",
+                "ENSG00000114770" = "ABCC5",
+                "ENSG00000115524" = "SF3B1",
+                "ENSG00000156052" = "GNAQ",
+                "ENSG00000163930" = "BAP1",
+                "ENSG00000245694" = "CRNDE",
+                
+                "ENSG00000228315" = "GUSBP11",
+                "ENSG00000131503" = "ANKHD1",
+                "ENSG00000185010" = "F8",
+                "ENSG00000141013" = "GAS8",
+                
+                "ENSG00000089057" = "SLC23A2",
+                "ENSG00000114861" = "FOXP1")
+
+
+keep <- which(rownames(res) %in% colnames(Article))
+res_Article <- res[keep,]
+a_genes <- rownames(res_Article)
+
+#Ordonner les noms des genes
+OrdArticle <- data.frame(a_genes, a_genes)
+colnames(OrdArticle) <- c("a_gene_code", "a_gene_name")
+for (i in 1:length(a_genes)){
+  gene <- a_genes[i]
+  OrdArticle$a_gene_name[i] <- Article[gene][1,1]
+}
+```
+
+Liste des gènes d'expression différentielle (padj inferieure à ALPHA) :
 
 ```{r padj inf a alpha}
 #keep <- which(!is.na(res$padj))
@@ -174,35 +207,13 @@ Liste des gènes différentiels (padj inferieure à ALPHA) :
 diff_genes <- subset(res, padj < ALPHA)
 d_genes <- rownames(diff_genes)
 d_genes
-length(d_genes)
 ```
 
-```{r Gene Article}
+Est-ce qu'on trouve des gènes cités dans l'article parmi les gènes d'expression différencielle ?
 
-ADAM12 = "ENSG00000148848"
-GNA11 =	"ENSG00000088256"
-UQCC1	= "ENSG00000101019"
-ABCC5	= "ENSG00000114770"
-SF3B1	= "ENSG00000115524"
-GNAQ = "ENSG00000156052"
-BAP1 = "ENSG00000163930"
-CRNDE = "ENSG00000245694"
+```{r genes article et diff}
 
-GUSBP11 = "ENSG00000228315"
-ANKHD1 = "ENSG00000131503"
-F8 = "ENSG00000185010"
-GAS8 = "ENSG00000141013"
-
-SLC23A2 = "ENSG00000089057"
-FOXP1 = "ENSG00000114861"
-
-
-gene_interet <- c(ADAM12, GNA11, UQCC1, ABCC5, SF3B1, GNAQ, BAP1, CRNDE, GUSBP11, ANKHD1, F8, GAS8, SLC23A2, FOXP1)
-gene_article <- c("ADAM12", "GNA11", "UQCC1", "ABCC5", "SF3B1", "GNAQ", "BAP1", "CRNDE", "GUSBP11", "ANKHD1", "F8", "GAS8", "SLC23A2", "FOXP1")
-
-
-keep <- which(rownames(res) %in% gene_interet)
-res_Article <- res[keep,]
+any(a_genes %in% d_genes)
 ```
 
 ### 3. Plots et Analyses pour les gènes de l'article
@@ -213,8 +224,9 @@ res_Article <- res[keep,]
 
 par(mfrow=c(2,3))
 
-for (g in rownames(res_Article)) {
-  plotCounts(dds, gene=g, intgroup="Type")
+for (i in 1:length(a_genes)) {
+  g <- a_genes[i]
+  plotCounts(dds, gene=g, intgroup="Type", main = OrdArticle$a_gene_name[i])
 }
 
 ```
@@ -226,12 +238,12 @@ for (g in rownames(res_Article)) {
 plotMA(res_Article)
 ```
 
-#### 3c. Ggplot
+#### 3c. Ggplot pour les gènes mentionnés dans l'article
 
 ```{r ARTICLE ggplot ExpDiff}
 ggplot(as.data.frame(res_Article), aes(x = baseMean, y = log2FoldChange)) + geom_point() + 
-  ggtitle("Expression des gènes de l'article :") +
-  ylab("log2 Fold Change") + xlab("BaseMean") #+ geom_text(label=gene_article)
+  ggtitle("Expression différentielle des gènes de l'article :") +
+  ylab("log2 Fold Change") + xlab("BaseMean") + geom_text(label=OrdArticle$a_gene_name)
 ```
 
 #### 3d. Heatmap pour les gènes mentionnés dans l'article
@@ -239,7 +251,7 @@ ggplot(as.data.frame(res_Article), aes(x = baseMean, y = log2FoldChange)) + geom
 ```{r ARTICLE heatmap}
 
 #Générer la heatmap
-heatmap(as.matrix(res_Article[, -1]))
+heatmap(as.matrix(res_Article[, -1]), labRow=OrdArticle$a_gene_name)
 ```
 
 #### 3e. VolcanoPlot pour les gènes mentionnés dans l'article
@@ -256,7 +268,7 @@ abline(h=-log10(alpha), col="brown")
 
 text(res_Article$log2FoldChange,
      -log10(res_Article$padj),
-     lab=rownames(res_Article), cex=0.4)
+     lab=OrdArticle$a_gene_name, cex=0.4)
 ```
 
 Conclusion : on ne trouve pas les mêmes résultats que dans l'article quels gèenes on trouve nous ? et quels sont-ils ?
@@ -296,7 +308,7 @@ ggplot(as.data.frame(res), aes(x = baseMean, y = log2FoldChange)) + geom_point()
 
 #### 4e. Heatmap pour les gènes d'expression différentielle
 
-```{r Check no NAs, eval = FALSE}
+```{r Check no NAs, eval = FALSE, include = FALSE}
 
 check_NAs <- function(table){
   s <- 0
@@ -312,7 +324,7 @@ Out #la fonction retourne le résultat
 }
 ```
 
-```{r Drop NAs, eval = FALSE}
+```{r Drop NAs, eval = FALSE, include = FALSE}
 
 if (length(check_NAs(resWna))==2){
   for (X in check_NAs(resWna)[2]){
@@ -352,8 +364,8 @@ text(res$log2FoldChange[gn.selected],
 ## A faire
 
 -   Mettre tout en anglais ou en Francais mais ds la meme langue (anglais de pref)
--   Faire en sorte que tout soit reproductible (path des fichiers d'entree, contruction de colData, Verification ou mise en ordre des colonnes de colData, les entrées des plot counts)
--   Remettre ordre du 3. en fonction de l'analyse tirée de chaque plot
+-   Faire en sorte que tout soit reproductible (path des fichiers d'entree, contruction de colData, Verification ou mise en ordre des colonnes de colData, *les entrées des plot counts*)
+-   *Remettre ordre du 3.* en fonction de l'analyse tirée de chaque plot
 -   Trouver les noms des genes qui nous interessent
 -   Les colorier sur les graphiques
--   Est ce qu'on fait le rapport comme ça ? Si oui cacher les codes qui ne sont pas de conclusion.
+-   *Est ce qu'on fait le rapport comme ça ? Si oui cacher les codes qui ne sont pas de conclusion.*
