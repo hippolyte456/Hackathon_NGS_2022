@@ -36,6 +36,7 @@ __repertory_GG = config["GetGenome"]["Repertory"]
 # ~~ output
 __output_GG_Genome = config["GetGenome"]["Repertory"] +  "{chromosom}" + config["GetGenome"]["Extension"]
 
+
 #--------------#
 #   GetAnnot   #
 #--------------#
@@ -48,6 +49,7 @@ __repertory_GA = config["GetAnnot"]["Repertory"]
 
 # ~~ output
 __output_GA_Genome = config["GetAnnot"]["Repertory"] + config["GetAnnot"]["Filename"] + ".gtf"
+
 
 #-----------------#
 #   IndexGenome   #
@@ -77,6 +79,26 @@ __output_CI_GenomeP = config["IndexGenome"]["Repertory"] + "genomeParameters.txt
 __output_CI_SA = config["IndexGenome"]["Repertory"] + "SA"
 __output_CI_SAi= config["IndexGenome"]["Repertory"] + "SAindex"
 
+
+#------------#
+#   FASTQC   #
+#------------#
+
+# Quality check
+
+# ~~ input
+__input_QC_1 = __output_GF_1
+__input_QC_2 = __output_GF_2
+__container_QC = "./" + config["Fastqc"]["container"]
+__repertory_QC = config["Fastqc"]["Repertory"]
+
+# ~~ parameters depending on inputs
+__params_QC_NCBI_id = "{ncbi_id}"
+
+# ~~ output
+__output_QC = config["Fastqc"]["Repertory"] + "{ncbi_id}" + config["Fastqc"]["Extension1"]
+
+
 #-----------------#
 #   MappingSTAR   #
 #-----------------#
@@ -90,13 +112,13 @@ __input_MS_2 = __output_GF_2
 __input_MS_index = __output_CI_SAi 
 __container_MS = "./" + config["MappingSTAR"]["container"]
 __repertory_MS = config["MappingSTAR"]["Repertory"]
-__ncbi_id = lambda wildcard : config["NCBI_id"]
 
 # ~~ parameters depending on inputs
 __params_MS_NCBI_id = "{ncbi_id}"
 
 # ~~ output
-__output_MSTAR_bam = config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + ".bam"
+__output_MSTAR_bam = config["MappingSTAR"]["Repertory"] + "{ncbi_id}" + config["MappingSTAR"]["Extension"]
+
 
 #----------------#
 #   CountReads   #
@@ -109,6 +131,10 @@ __input_CR_counts = expand("{repertory}{filename}{extension}",
                               extension = config["MappingSTAR"]["Extension"])
 __gtf_CR = __output_GA_Genome
 __mapping_CR = __output_MSTAR_bam
+__fastqc_CR = expand("{repertory}{filename}{extension}",
+                              repertory = config["Fastqc"]["Repertory"],
+                              filename = config["NCBI_id"] ,
+                              extension = config["Fastqc"]["Extension1"])
 
 # ~~ parameters depending on inputs
 __file_name_CR = config["CountReads"]["Filename"]
@@ -117,6 +143,21 @@ __repertory_CR = config["CountReads"]["Repertory"]
 
 # ~~ output
 __output_CR = config["CountReads"]["Repertory"] + config["CountReads"]["Filename"] + ".counts"
+
+
+#-----------#
+#   Deseq   #
+#-----------#
+
+# ~~ input
+__input_DES_count = __output_CR
+
+# ~~ parameters depending on inputs
+__container_DES = "./" + config["Deseq"]["container"]
+__repertory_DES = config["Deseq"]["Repertory"]
+
+# ~~ output
+__output_fake =  config["Deseq"]["Repertory"] + "fake" + config["Deseq"]["Extension"]
 
 
 #####################
@@ -129,6 +170,8 @@ include : os.getcwd() + "/rules/IndexGenome.py"
 include : os.getcwd() + "/rules/MappingStar.py"
 include : os.getcwd() + "/rules/GetAnnot.py"
 include : os.getcwd() + "/rules/CountReads.py"
+include : os.getcwd() + "/rules/Fastqc.py"
+include : os.getcwd() + "/rules/Deseq.py"
 
 ###################
 #   Rule Target   #
@@ -137,6 +180,6 @@ include : os.getcwd() + "/rules/CountReads.py"
 rule targets :
     input :
         __output_CR
-        
+
     message :
         "All the workflow is done !!"

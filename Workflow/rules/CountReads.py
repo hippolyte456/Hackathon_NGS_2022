@@ -1,7 +1,8 @@
 rule CountReads :
     input :
         gtf = __gtf_CR,
-        bam = __input_CR_counts
+        bam = __input_CR_counts,
+        fastqc = __fastqc_CR
 
     params :
        CR_Repertory = __repertory_CR,

@@ -17,7 +17,7 @@ reset="\e[0m"
 
 
 #--------------#
-#   0.-Setup   #
+#   0. Setup   #
 #--------------#
 
 # 0.1 Get the OS distribution
@@ -133,7 +133,6 @@ else
     echo -e -n "$RED Error Snakemake not find" | sort
     exit 1
 fi
-#  25 = number max of threads needed in the wf
 
 #--------------#
 #   5. Bonus   #

@@ -49,13 +49,19 @@ GetFastq :
   Repertory : fastq-dump/
   container : images/fastq-dump
   Extension : .sra
-  threads : 8 # Number of SRAIDS, if it is higher than the number of cores available on your computer it will be scaled down automatically
+  threads : 1 
+
+Fastqc :
+  Repertory : fastqc/
+  container : images/fastqc
+  Extension1 : _1_fastqc.html
+  threads : 1
 
 GetGenome :
   Repertory : Genome/
   Extension : .fa.gz
   container : images/fastq-dump
-  threads : 25 # Number of chr to download, if it is higher than the number of cores available on your computer it will be scaled down automatically
+  threads : 1 
 
 GetAnnot :
   Repertory : GenomeAnnot/
@@ -63,22 +69,28 @@ GetAnnot :
   Filename : genome_annot
   container : images/fastq-dump
   genome_ref : GRCh38
-  threads : 8
+  threads : 1
 
 IndexGenome:
   Repertory : IndexGenome/
   container : images/star
-  threads : 1
+  threads : 8 # Be carefull to not overload STAR
 
 MappingSTAR :
   Repertory : MappingSTAR/
   container : images/star
   Extension : .bam
-  threads : 8
+  threads : 8  # Be carefull to not overload STAR
 
 CountReads :
   Repertory : CountReads/
   Extension : .counts
   Filename :  CountReads
   container : images/subread
+  threads : 1
+
+Deseq :
+  Repertory : Deseq/
+  Extension : .R
+  container : images/deseq2
   threads : 1
