@@ -9,6 +9,9 @@
 * A Snakefile "[ReproHackathon.wf](./ReproHackathon.wf)" with the workflow.
 * A [README](./README.md) file
 
+## Resume
+![alt text](./Rules_Architecture.png)
+
 ## Setup
 
 ## Singularity 
