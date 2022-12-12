@@ -56,22 +56,3 @@ From the Workflow directory :
 ```bash
 snakemake --use-singularity -s $PWD/ReproHackathon.wf --configfile $PWD/configuration.yml -j 1 -k --printshellcmds
 ```
-# Work Status
-
-## Rules (Need to add a description but not now as it will still change maybe)
- * GetFastq.rules : Recover DNA Seq from article (only SRR628586 for the moment as it is the lightest one)
- * GetGenome.rules : Recover human Chromosome.fa.gz (only the last 4 because they are the lightest)
- * CreateIndex.rules : Index chr.fa.gz files (do not work for the moment with heavy chr such as 1 and 2)
- * GetAnnot : Recover genome annotations for Homo sapiens
- * MappingSTAR : Map the DNA seq with index result (doesn't seem to work yet, i mean the workflow is good but the result of the counting show 0 aligment ...)
-
-## Next work
- * Scaling-up GetFastq.rules to accept multiple Seq list (as GetGenome) (Done)
- * Fix issue with CreateIndex and too heavy files  (Done)
- * Fix issue with Mapping Result (Done)
- * Remove plointless code (cleaning code)
- * Improve README files (Work in progress)
- * Once everything is good we will be able to move on DESeq2 script
- * Try with lower VM capacity
- * See what's up with R when generating the images (seems like downloading way too much packages) ...
- * Implement FastQC (beginning of the workflow = multithreading ?)

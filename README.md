@@ -20,7 +20,6 @@ We want to analyze this data in order to find <a href="https://en.wikipedia.org/
 To do this, we have designed and implemented a reproductible workflow.<br>
 * A Directory [Tools](./Tools/) to build all containers (using Singularity) with the tools that will be used in the workflow.
 * A Directory [Workflow](./Workflow/) with the rules and files (using Snakemake) needed for the workflow.
-* A Directory [Doc] with documents about this project. (TO DO)
 * A Script [run.sh](./run.sh) to execute the workflow.
 * A [README](./README.md) file
 
@@ -48,6 +47,3 @@ It should also work for a VM of 8 CPUs, below 8 the indexing of the whole genome
 ```bash
 ./run.sh
 ```
-
-The report of our work is available here 
-
