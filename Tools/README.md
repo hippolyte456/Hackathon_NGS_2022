@@ -71,3 +71,9 @@ For Ubuntu (from the Tools directory) :
 ./images.sh
 ```
 Please do not commit images on the git repository.
+
+## Final result
+
+The following text will appear once all the containers are successfully compiled.
+
+![alt text](./Final_prompt.png)
